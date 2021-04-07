@@ -10,15 +10,18 @@ import { tripEventListTemplate } from './views/trip-event-list';
 import { tripEventTemplate } from './views/trip-event';
 import { tripEditEventTemplate } from './views/trip-edit-event';
 import { tripAddEventTemplate } from './views/trip-add-event';
+import { generateWaypoint } from './mock/waypoint.js';
 
 const renderElement = (container, template, place='beforeend') => {
-  container.insertAdjacentHTML(place, template());
+  container.insertAdjacentHTML(place, template);
 };
 
-const TASK_AMOUNT = 3;
-const renderEvents = (container) => {
-  for(let i=0; i < TASK_AMOUNT; i++){
-    renderElement(container, tripEventTemplate);
+const TASK_AMOUNT = 20;
+const wayPoints = new Array(TASK_AMOUNT).fill().map(generateWaypoint);
+
+const renderEvents = (container, wayPointsList) => {
+  for (const item of wayPointsList) {
+    renderElement(container, tripEventTemplate(item));
   }
 };
 
@@ -29,23 +32,23 @@ const tripControlsFilters = tripMain.querySelector('.trip-controls__filters');
 const tripEventsSection = document.querySelector('.trip-events');
 
 //Маршрут и стоимость
-renderElement(tripMain, tripInfoTemplate, 'afterbegin');
+renderElement(tripMain, tripInfoTemplate(), 'afterbegin');
 const tripInfo = pageHeader.querySelector('.trip-info');
-renderElement(tripInfo, tripInfoMainTemplate);
-renderElement(tripInfo, tripInfoCostTemplate);
+renderElement(tripInfo, tripInfoMainTemplate());
+renderElement(tripInfo, tripInfoCostTemplate());
 
 //Меню
-renderElement(tripControlsNavigation, tripMenuTemplate);
+renderElement(tripControlsNavigation, tripMenuTemplate());
 
 //Фильтры
-renderElement(tripControlsFilters, tripFiltersTemplate);
+renderElement(tripControlsFilters, tripFiltersTemplate());
 
 //Сортировка
-renderElement(tripEventsSection, tripSortTemplate);
+renderElement(tripEventsSection, tripSortTemplate());
 
 //Контент
-renderElement(tripEventsSection, tripEventListTemplate);
+renderElement(tripEventsSection, tripEventListTemplate());
 const tripEventList = tripEventsSection.querySelector('.trip-events__list');
-renderElement(tripEventList, tripEditEventTemplate);
-renderElement(tripEventList, tripAddEventTemplate);
-renderEvents(tripEventList);
+renderElement(tripEventList, tripEditEventTemplate());
+renderElement(tripEventList, tripAddEventTemplate());
+renderEvents(tripEventList, wayPoints);
