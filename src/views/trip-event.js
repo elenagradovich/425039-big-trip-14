@@ -1,4 +1,4 @@
-import { favoriteClass, getDate } from '../utils';
+import { favoriteClass, getDate, getPeriod } from '../utils';
 import { typeIcons } from '../const';
 
 export const tripEventTemplate = (props) => {
@@ -10,13 +10,6 @@ export const tripEventTemplate = (props) => {
         &plus;&euro;&nbsp;
         <span className="event__offer-price">${offer.price}</span>
       </li>`).join(' ');
-
-
-  const getPeriod = (fromDate, toDate) => {
-    //return getPeriodFormat(toDate, fromDate);
-    return 'no period yet';
-  };
-
 
   return `<li class="trip-events__item">
             <div class="event">

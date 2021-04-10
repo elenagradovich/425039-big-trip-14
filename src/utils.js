@@ -42,7 +42,7 @@ export const getPointCities = (eventPoints) => {
   const cities = new Set();
   for(const point of eventPoints) {
     cities.add(point.destination.name);
-  };
+  }
   return Array.from(cities);
 };
 
@@ -57,9 +57,5 @@ export const getEventPriceSum = (eventPoints) => {
   return eventPoints.reduce((pointSum, point) => {
     return pointSum + getFullEventPrice(point);
   }, 0);
-};
-
-export const getPointDatePeriod = (dateFrom, dateTo) => {
-
 };
 
