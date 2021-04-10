@@ -9,8 +9,9 @@ import { tripSortTemplate } from './views/trip-sort';
 import { tripEventListTemplate } from './views/trip-event-list';
 import { tripEventTemplate } from './views/trip-event';
 import { tripEditEventTemplate } from './views/trip-edit-event';
-import { tripAddEventTemplate } from './views/trip-add-event';
 import { generateWaypoint } from './mock/waypoint.js';
+
+import { getEventPriceSum, getPointCities } from './utils';
 
 const renderElement = (container, template, place='beforeend') => {
   container.insertAdjacentHTML(place, template);
@@ -34,8 +35,8 @@ const tripEventsSection = document.querySelector('.trip-events');
 //Маршрут и стоимость
 renderElement(tripMain, tripInfoTemplate(), 'afterbegin');
 const tripInfo = pageHeader.querySelector('.trip-info');
-renderElement(tripInfo, tripInfoMainTemplate());
-renderElement(tripInfo, tripInfoCostTemplate());
+renderElement(tripInfo, tripInfoMainTemplate(getPointCities(wayPoints)));
+renderElement(tripInfo, tripInfoCostTemplate(getEventPriceSum(wayPoints)));
 
 //Меню
 renderElement(tripControlsNavigation, tripMenuTemplate());
@@ -50,5 +51,5 @@ renderElement(tripEventsSection, tripSortTemplate());
 renderElement(tripEventsSection, tripEventListTemplate());
 const tripEventList = tripEventsSection.querySelector('.trip-events__list');
 renderElement(tripEventList, tripEditEventTemplate());
-renderElement(tripEventList, tripAddEventTemplate());
+renderElement(tripEventList, tripEditEventTemplate(generateWaypoint()));
 renderEvents(tripEventList, wayPoints);
