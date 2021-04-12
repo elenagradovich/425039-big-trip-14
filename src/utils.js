@@ -59,3 +59,4 @@ export const getEventPriceSum = (eventPoints) => {
   }, 0);
 };
 
+export const getPeriod = (dateFrom, dateTo) => `${getDate(dateFrom, 'date_full')} - ${getDate(dateTo,'date_full')}`;

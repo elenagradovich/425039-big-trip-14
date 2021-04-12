@@ -138,3 +138,9 @@ export const typeIcons = new Map(Object.entries({
   'transport': 'img/icons/transport.png',
   'drive': 'img/icons/transport.png',
 }));
+
+export const filterParameters = ['everything', 'future', 'past'];
+
+export const sortParameters = ['day', 'event', 'time', 'price', 'offer'];
+
+export const menuParameters = ['stats', 'table'];

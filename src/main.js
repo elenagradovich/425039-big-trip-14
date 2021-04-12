@@ -10,8 +10,9 @@ import { tripEventListTemplate } from './views/trip-event-list';
 import { tripEventTemplate } from './views/trip-event';
 import { tripEditEventTemplate } from './views/trip-edit-event';
 import { generateWaypoint } from './mock/waypoint.js';
+import { menuParameters, sortParameters, filterParameters } from './const';
 
-import { getEventPriceSum, getPointCities } from './utils';
+import { getEventPriceSum, getPointCities, getRandomValue } from './utils';
 
 const renderElement = (container, template, place='beforeend') => {
   container.insertAdjacentHTML(place, template);
@@ -39,13 +40,13 @@ renderElement(tripInfo, tripInfoMainTemplate(getPointCities(wayPoints)));
 renderElement(tripInfo, tripInfoCostTemplate(getEventPriceSum(wayPoints)));
 
 //Меню
-renderElement(tripControlsNavigation, tripMenuTemplate());
+renderElement(tripControlsNavigation, tripMenuTemplate(menuParameters[getRandomValue(menuParameters.length-1)]));
 
 //Фильтры
-renderElement(tripControlsFilters, tripFiltersTemplate());
+renderElement(tripControlsFilters, tripFiltersTemplate(filterParameters[getRandomValue(filterParameters.length-1)]));
 
 //Сортировка
-renderElement(tripEventsSection, tripSortTemplate());
+renderElement(tripEventsSection, tripSortTemplate(sortParameters[getRandomValue(sortParameters.length-1)]));
 
 //Контент
 renderElement(tripEventsSection, tripEventListTemplate());

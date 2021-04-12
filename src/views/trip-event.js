@@ -26,7 +26,7 @@ export const tripEventTemplate = (props) => {
                   <time class="event__end-time" datetime="${getDate(date_to, 'date_full')}">
                      ${getDate(date_to, 'time')}</time>
                 </p>
-                <p class="event__duration">${getPeriod(date_from - date_to)}</p>
+                <p class="event__duration">${getPeriod(date_from,date_to)}</p>
               </div>
               <p class="event__price">
                 &euro;&nbsp;<span class="event__price-value">${base_price}</span>
