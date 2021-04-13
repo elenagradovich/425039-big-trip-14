@@ -26,15 +26,15 @@ export const generateWaypoint = () => {
   const type = generateType();
   const offers =  getOffers(type);
   return {
-    base_price: getRandomValue(100),
-    date_from: generateDate(),
-    date_to: generateDate(),
+    basePrice: getRandomValue(100),
+    dateFrom: generateDate(),
+    dateTo: generateDate(),
     destination: {
       description: descriptions[getRandomValue(descriptions.length - 1)],
       name: cities[getRandomValue(cities.length - 1)],
       pictures: generateImages(),
     },
-    is_favorite: Boolean(getRandomValue()),
+    isFavorite: Boolean(getRandomValue()),
     type,
     offers,
   };

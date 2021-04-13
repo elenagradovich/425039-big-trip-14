@@ -8,12 +8,6 @@ export const getRandomValue = (maxLength = 1, minLength = 0) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-export const favoriteClass = (is_favorite) => {
-  return is_favorite
-    ? 'event__favorite-btn event__favorite-btn--active'
-    : 'event__favorite-btn';
-};
-
 export const getDate = (date, type) => {
   let dateFormat;
   switch (type) {
@@ -46,10 +40,10 @@ export const getPointCities = (eventPoints) => {
   return Array.from(cities);
 };
 
-const getFullEventPrice = (point) => {
-  const { base_price, offers } = point;
-  const offerPricesSum = offers.map((item) => item.price).reduce((sum, item) => sum + item);
-  return offerPricesSum + base_price;
+export const getFullEventPrice = (point) => {
+  const { basePrice, offers } = point;
+  const offerPricesSum = offers.map((item) => item.price).reduce(((sum, item) => sum + item), basePrice);
+  return offerPricesSum + basePrice;
 };
 
 
