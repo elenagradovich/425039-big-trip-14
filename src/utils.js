@@ -23,7 +23,6 @@ export const getDate = (date, type) => {
     default:
       dateFormat = 'DD/MM/YY HH:mm';
   }
-
   return dayjs(date).format(dateFormat);
 };
 

@@ -10,7 +10,7 @@ import { tripEventListTemplate } from './views/trip-event-list';
 import { tripEventTemplate } from './views/trip-event';
 import { tripEditEventTemplate } from './views/trip-edit-event';
 import { generateWaypoint } from './mock/waypoint.js';
-import { menuParameters, sortParameters, filterParameters } from './const';
+import { menuParameters, sortParameters, filterParameters, types, cities } from './const';
 
 import { getEventPriceSum, getPointCities, getRandomValue } from './utils';
 
@@ -51,6 +51,6 @@ renderElement(tripEventsSection, tripSortTemplate(sortParameters[getRandomValue(
 //Контент
 renderElement(tripEventsSection, tripEventListTemplate());
 const tripEventList = tripEventsSection.querySelector('.trip-events__list');
-renderElement(tripEventList, tripEditEventTemplate());
-renderElement(tripEventList, tripEditEventTemplate(generateWaypoint()));
+renderElement(tripEventList, tripEditEventTemplate(cities, types)); //cities, types приходят с сервера
+renderElement(tripEventList, tripEditEventTemplate(cities, types, wayPoints[0]));
 renderEvents(tripEventList, wayPoints);
