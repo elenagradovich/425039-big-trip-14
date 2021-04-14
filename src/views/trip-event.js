@@ -1,8 +1,7 @@
 import { getDate, getPeriod } from '../utils';
 import { typeIcons } from '../const';
 
-export const tripEventTemplate = (props) => {
-  const { basePrice, dateFrom, dateTo, isFavorite, offers, type, destination } = props;
+export const tripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
   const { name } = destination;
 
   const checkIsFavoriteClass = (isFavorite) => {
