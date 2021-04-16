@@ -1,4 +1,4 @@
-import { getDate, getPeriod } from '../utils';
+import {createElement, getDate, getPeriod} from '../utils';
 import { typeIcons } from '../const';
 
 const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
@@ -63,6 +63,13 @@ export default class TripEvent {
 
   getTemplate () {
     return createTripEventTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
   }
 
   removeElement () {

@@ -1,4 +1,4 @@
-import { getDate } from '../utils';
+import { getDate, createElement } from '../utils';
 import { typeIcons } from '../const';
 
 const createTripEditEventTemplate = (cities, types, event = {}) => {
@@ -137,6 +137,13 @@ export default class TripEditEvent {
 
   getTemplate () {
     return createTripEditEventTemplate(this._cities, this._types, this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
   }
 
   removeElement () {

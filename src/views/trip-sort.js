@@ -1,3 +1,5 @@
+import {createElement} from '../utils';
+
 const createTripSortTemplate = (sortParameters, activeParam) => {
   const createSortTemplates = sortParameters.map((sortParam) => `<div class="trip-sort__item  trip-sort__item--${sortParam}">
               <input id="sort-${sortParam}" class="trip-sort__input  visually-hidden"
@@ -21,6 +23,13 @@ export default class TripSort {
 
   getTemplate () {
     return createTripSortTemplate(this._sortParameters, this._activeParam);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
   }
 
   removeElement () {

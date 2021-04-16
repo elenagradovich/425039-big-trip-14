@@ -1,3 +1,5 @@
+import {createElement} from '../utils';
+
 const createTripInfoMainTemplate = (cities, period) => {
   return `<div class="trip-info__main">
             <h1 class="trip-info__title">${cities.join('-')}</h1>
@@ -14,6 +16,13 @@ export default class TripInfoMain{
 
   getTemplate () {
     return createTripInfoMainTemplate(this._cities, this._period);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
   }
 
   removeElement () {

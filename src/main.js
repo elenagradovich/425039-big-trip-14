@@ -12,14 +12,14 @@ import TripEditEventView from './views/trip-edit-event';
 import { generateWaypoint } from './mock/waypoint.js';
 import { menuParameters, sortParameters, filterParameters, types, cities, renderPosition } from './const';
 
-import { getEventPriceSum, getPointCities, getRandomValue, renderTemplate } from './utils';
+import { getEventPriceSum, getPointCities, getRandomValue, render } from './utils';
 
 const TASK_AMOUNT = 20;
 const wayPoints = new Array(TASK_AMOUNT).fill().map(generateWaypoint);
 
 const renderEvents = (container, wayPointsList) => {
   for (const item of wayPointsList) {
-    renderTemplate(container, new TripEventView(item).getTemplate());
+    render(container, new TripEventView(item).getElement(), renderPosition.BEFOREEND);
   }
 };
 
@@ -30,26 +30,26 @@ const tripControlsFilters = tripMain.querySelector('.trip-controls__filters');
 const tripEventsSection = document.querySelector('.trip-events');
 
 //Маршрут и стоимость
-renderTemplate(tripMain, new TripInfoView().getTemplate(), renderPosition.AFTERBEGIN);
+render(tripMain, new TripInfoView().getElement(), renderPosition.AFTERBEGIN);
 const tripInfo = pageHeader.querySelector('.trip-info');
-renderTemplate(tripInfo, new TripInfoMainView(getPointCities(wayPoints), 'no period yet').getTemplate());
-renderTemplate(tripInfo, new TripInfoCostView(getEventPriceSum(wayPoints)).getTemplate());
+render(tripInfo, new TripInfoMainView(getPointCities(wayPoints), 'no period yet').getElement(), renderPosition.BEFOREEND);
+render(tripInfo, new TripInfoCostView(getEventPriceSum(wayPoints)).getElement(), renderPosition.BEFOREEND);
 
 //Меню
 const activeMenuParam = menuParameters[getRandomValue(menuParameters.length-1)];
-renderTemplate(tripControlsNavigation, new TripMenuView(sortParameters, activeMenuParam).getTemplate());
+render(tripControlsNavigation, new TripMenuView(sortParameters, activeMenuParam).getElement(), renderPosition.BEFOREEND);
 
 //Фильтры
 const activeFilterParam = filterParameters[getRandomValue(filterParameters.length-1)];
-renderTemplate(tripControlsFilters, new TripFilterView(filterParameters, activeFilterParam).getTemplate());
+render(tripControlsFilters, new TripFilterView(filterParameters, activeFilterParam).getElement(), renderPosition.BEFOREEND);
 
 //Сортировка
 const activeSortParam = sortParameters[getRandomValue(sortParameters.length-1)];
-renderTemplate(tripEventsSection, new TripSortView(sortParameters, activeSortParam).getTemplate());
+render(tripEventsSection, new TripSortView(sortParameters, activeSortParam).getElement(), renderPosition.BEFOREEND);
 
 //Контент
-renderTemplate(tripEventsSection,new TripEventList().getTemplate());
+render(tripEventsSection,new TripEventList().getElement(), renderPosition.BEFOREEND);
 const tripEventList = tripEventsSection.querySelector('.trip-events__list');
-renderTemplate(tripEventList, new TripEditEventView(cities, types).getTemplate()); //cities, types приходят с сервера
-renderTemplate(tripEventList, new TripEditEventView(cities, types, wayPoints[0]).getTemplate());
+render(tripEventList, new TripEditEventView(cities, types).getElement(), renderPosition.AFTERBEGIN); //cities, types приходят с сервера
+render(tripEventList, new TripEditEventView(cities, types, wayPoints[0]).getElement(), renderPosition.AFTERBEGIN);
 renderEvents(tripEventList, wayPoints);

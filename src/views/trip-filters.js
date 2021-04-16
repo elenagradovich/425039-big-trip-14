@@ -1,3 +1,5 @@
+import {createElement} from '../utils';
+
 const createrTripFiltersTemplate = (filterParameters, activeParam) => {
   const createFilterTemplates = filterParameters.map((filterParam) => `<div class="trip-filters__filter">
               <input id="filter-${filterParam}" class="trip-filters__filter-input  visually-hidden"
@@ -21,6 +23,13 @@ export default class TripFilters {
 
   getTemplate () {
     return createrTripFiltersTemplate(this._filterParameters, this._activeParam);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
   }
 
   removeElement () {

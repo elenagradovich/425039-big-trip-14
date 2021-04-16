@@ -1,3 +1,5 @@
+import {createElement} from '../utils';
+
 const createTripEventListTemplate = () => {
   return `<ul class="trip-events__list">
 
@@ -11,6 +13,13 @@ export default class TripEventList {
 
   getTemplate () {
     return createTripEventListTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
   }
 
   removeElement () {
