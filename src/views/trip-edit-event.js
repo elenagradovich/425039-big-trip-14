@@ -17,12 +17,14 @@ const createTripEditEventTemplate = (cities, types, event = {}) => {
     pictures = '',
   } = destination;
 
-  const createTypeTemplates = ( activeType ) => types.map((type) => `<div class="event__type-item">
+  const createTypeTemplates = ( activeType ) => {
+    return types.map((type) => `<div class="event__type-item">
       <input id="event-type-${type.toLowerCase()}-1" class="event__type-input visually-hidden"
         type="radio" name="event-type" value="${type.toLowerCase()}"
         ${activeType.toLowerCase() === type.toLowerCase() ? 'checked' : ''}>
       <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
     </div>`).join(' ');
+  };
 
   const createOffersTemplate = () => {
     return offers && offers.map((offer) =>

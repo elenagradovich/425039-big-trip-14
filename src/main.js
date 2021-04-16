@@ -17,9 +17,49 @@ import { getEventPriceSum, getPointCities, getRandomValue, render } from './util
 const TASK_AMOUNT = 20;
 const wayPoints = new Array(TASK_AMOUNT).fill().map(generateWaypoint);
 
+const renderEvent = (pointContainer, point) => {
+  const tripEventComponent = new TripEventView(point);
+  const tripEditEventComponent = new TripEditEventView(cities, types, point);
+
+  const replaceEventToEventEdit = () => {
+    pointContainer.replaceChild(tripEditEventComponent.getElement(), tripEventComponent.getElement());
+  };
+
+  const replaceEditEventToEvent = () => {
+    pointContainer.replaceChild(tripEventComponent.getElement(), tripEditEventComponent.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceEditEventToEvent();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+  tripEventComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceEventToEventEdit();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+
+  tripEditEventComponent.getElement().querySelector('.event--edit').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceEditEventToEvent();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  tripEditEventComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
+    evt.preventDefault();
+    replaceEditEventToEvent();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  render(pointContainer, tripEventComponent.getElement(), renderPosition.BEFOREEND);
+};
+
 const renderEvents = (container, wayPointsList) => {
-  for (const item of wayPointsList) {
-    render(container, new TripEventView(item).getElement(), renderPosition.BEFOREEND);
+  for (const point of wayPointsList) {
+    renderEvent(container, point);
   }
 };
 
@@ -50,6 +90,4 @@ render(tripEventsSection, new TripSortView(sortParameters, activeSortParam).getE
 //Контент
 render(tripEventsSection,new TripEventList().getElement(), renderPosition.BEFOREEND);
 const tripEventList = tripEventsSection.querySelector('.trip-events__list');
-render(tripEventList, new TripEditEventView(cities, types).getElement(), renderPosition.AFTERBEGIN); //cities, types приходят с сервера
-render(tripEventList, new TripEditEventView(cities, types, wayPoints[0]).getElement(), renderPosition.AFTERBEGIN);
 renderEvents(tripEventList, wayPoints);
