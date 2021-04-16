@@ -144,3 +144,8 @@ export const filterParameters = ['everything', 'future', 'past'];
 export const sortParameters = ['day', 'event', 'time', 'price', 'offer'];
 
 export const menuParameters = ['stats', 'table'];
+
+export const renderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};

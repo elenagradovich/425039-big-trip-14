@@ -1,7 +1,7 @@
 import { getDate } from '../utils';
 import { typeIcons } from '../const';
 
-export const tripEditEventTemplate = (cities, types, event = {}) => {
+const createTripEditEventTemplate = (cities, types, event = {}) => {
   const {
     basePrice = '',
     dateFrom =  '',
@@ -126,3 +126,20 @@ export const tripEditEventTemplate = (cities, types, event = {}) => {
               </form>
             </li>`;
 };
+
+export default class TripEditEvent {
+  constructor(cities, types, event = {}) {
+    this._element = null;
+    this._cities = cities;
+    this._types = types;
+    this._event = event;
+  }
+
+  getTemplate () {
+    return createTripEditEventTemplate(this._cities, this._types, this._event);
+  }
+
+  removeElement () {
+    this.element = null;
+  }
+}

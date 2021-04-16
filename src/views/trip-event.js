@@ -1,7 +1,7 @@
 import { getDate, getPeriod } from '../utils';
 import { typeIcons } from '../const';
 
-export const tripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
+const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
   const { name } = destination;
 
   const checkIsFavoriteClass = (isFavorite) => {
@@ -54,3 +54,18 @@ export const tripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, off
             </div>
           </li>`;
 };
+
+export default class TripEvent {
+  constructor(event) {
+    this._element = null;
+    this._event = event;
+  }
+
+  getTemplate () {
+    return createTripEventTemplate(this._event);
+  }
+
+  removeElement () {
+    this.element = null;
+  }
+}

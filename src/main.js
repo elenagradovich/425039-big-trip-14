@@ -1,29 +1,25 @@
-import { tripInfoTemplate } from './views/trip-info-container';
-import { tripInfoMainTemplate } from './views/trip-info-main';
-import { tripInfoCostTemplate } from './views/trip-info-cost';
+import TripInfoView from './views/trip-info-container';
+import TripInfoMainView from './views/trip-info-main';
+import TripInfoCostView from './views/trip-info-cost';
 
-import { tripMenuTemplate } from './views/trip-menu';
-import { tripFiltersTemplate } from './views/trip-filters';
-import { tripSortTemplate } from './views/trip-sort';
+import TripMenuView from './views/trip-menu';
+import TripFilterView from './views/trip-filters';
+import TripSortView from './views/trip-sort';
 
-import { tripEventListTemplate } from './views/trip-event-list';
-import { tripEventTemplate } from './views/trip-event';
-import { tripEditEventTemplate } from './views/trip-edit-event';
+import TripEventList from './views/trip-event-list';
+import TripEventView from './views/trip-event';
+import TripEditEventView from './views/trip-edit-event';
 import { generateWaypoint } from './mock/waypoint.js';
-import { menuParameters, sortParameters, filterParameters, types, cities } from './const';
+import { menuParameters, sortParameters, filterParameters, types, cities, renderPosition } from './const';
 
-import { getEventPriceSum, getPointCities, getRandomValue } from './utils';
-
-const renderElement = (container, template, place='beforeend') => {
-  container.insertAdjacentHTML(place, template);
-};
+import { getEventPriceSum, getPointCities, getRandomValue, renderTemplate } from './utils';
 
 const TASK_AMOUNT = 20;
 const wayPoints = new Array(TASK_AMOUNT).fill().map(generateWaypoint);
 
 const renderEvents = (container, wayPointsList) => {
   for (const item of wayPointsList) {
-    renderElement(container, tripEventTemplate(item));
+    renderTemplate(container, new TripEventView(item).getTemplate());
   }
 };
 
@@ -34,23 +30,26 @@ const tripControlsFilters = tripMain.querySelector('.trip-controls__filters');
 const tripEventsSection = document.querySelector('.trip-events');
 
 //Маршрут и стоимость
-renderElement(tripMain, tripInfoTemplate(), 'afterbegin');
+renderTemplate(tripMain, new TripInfoView().getTemplate(), renderPosition.AFTERBEGIN);
 const tripInfo = pageHeader.querySelector('.trip-info');
-renderElement(tripInfo, tripInfoMainTemplate(getPointCities(wayPoints)));
-renderElement(tripInfo, tripInfoCostTemplate(getEventPriceSum(wayPoints)));
+renderTemplate(tripInfo, new TripInfoMainView(getPointCities(wayPoints), 'no period yet').getTemplate());
+renderTemplate(tripInfo, new TripInfoCostView(getEventPriceSum(wayPoints)).getTemplate());
 
 //Меню
-renderElement(tripControlsNavigation, tripMenuTemplate(menuParameters[getRandomValue(menuParameters.length-1)]));
+const activeMenuParam = menuParameters[getRandomValue(menuParameters.length-1)];
+renderTemplate(tripControlsNavigation, new TripMenuView(sortParameters, activeMenuParam).getTemplate());
 
 //Фильтры
-renderElement(tripControlsFilters, tripFiltersTemplate(filterParameters[getRandomValue(filterParameters.length-1)]));
+const activeFilterParam = filterParameters[getRandomValue(filterParameters.length-1)];
+renderTemplate(tripControlsFilters, new TripFilterView(filterParameters, activeFilterParam).getTemplate());
 
 //Сортировка
-renderElement(tripEventsSection, tripSortTemplate(sortParameters[getRandomValue(sortParameters.length-1)]));
+const activeSortParam = sortParameters[getRandomValue(sortParameters.length-1)];
+renderTemplate(tripEventsSection, new TripSortView(sortParameters, activeSortParam).getTemplate());
 
 //Контент
-renderElement(tripEventsSection, tripEventListTemplate());
+renderTemplate(tripEventsSection,new TripEventList().getTemplate());
 const tripEventList = tripEventsSection.querySelector('.trip-events__list');
-renderElement(tripEventList, tripEditEventTemplate(cities, types)); //cities, types приходят с сервера
-renderElement(tripEventList, tripEditEventTemplate(cities, types, wayPoints[0]));
+renderTemplate(tripEventList, new TripEditEventView(cities, types).getTemplate()); //cities, types приходят с сервера
+renderTemplate(tripEventList, new TripEditEventView(cities, types, wayPoints[0]).getTemplate());
 renderEvents(tripEventList, wayPoints);

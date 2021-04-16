@@ -1,5 +1,17 @@
-export const tripInfoTemplate = () => {
-  return `<section class="trip-main__trip-info  trip-info">
+const createTripInfoTemplate = () => '<section class="trip-main__trip-info  trip-info"></section>';
 
-        </section>`;
-};
+export default class TripInfo {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate () {
+    return createTripInfoTemplate();
+  }
+
+  removeElement () {
+    this.element = null;
+  }
+}
+
+
