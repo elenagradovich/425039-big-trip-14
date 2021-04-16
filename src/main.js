@@ -9,6 +9,8 @@ import TripSortView from './views/trip-sort';
 import TripEventList from './views/trip-event-list';
 import TripEventView from './views/trip-event';
 import TripEditEventView from './views/trip-edit-event';
+import NoEventsComponentView from './views/trip-no-events';
+
 import { generateWaypoint } from './mock/waypoint.js';
 import { menuParameters, sortParameters, filterParameters, types, cities, renderPosition } from './const';
 
@@ -69,12 +71,6 @@ const tripControlsNavigation = tripMain.querySelector('.trip-controls__navigatio
 const tripControlsFilters = tripMain.querySelector('.trip-controls__filters');
 const tripEventsSection = document.querySelector('.trip-events');
 
-//Маршрут и стоимость
-render(tripMain, new TripInfoView().getElement(), renderPosition.AFTERBEGIN);
-const tripInfo = pageHeader.querySelector('.trip-info');
-render(tripInfo, new TripInfoMainView(getPointCities(wayPoints), 'no period yet').getElement(), renderPosition.BEFOREEND);
-render(tripInfo, new TripInfoCostView(getEventPriceSum(wayPoints)).getElement(), renderPosition.BEFOREEND);
-
 //Меню
 const activeMenuParam = menuParameters[getRandomValue(menuParameters.length-1)];
 render(tripControlsNavigation, new TripMenuView(sortParameters, activeMenuParam).getElement(), renderPosition.BEFOREEND);
@@ -88,6 +84,18 @@ const activeSortParam = sortParameters[getRandomValue(sortParameters.length-1)];
 render(tripEventsSection, new TripSortView(sortParameters, activeSortParam).getElement(), renderPosition.BEFOREEND);
 
 //Контент
-render(tripEventsSection,new TripEventList().getElement(), renderPosition.BEFOREEND);
+render(tripEventsSection, new TripEventList().getElement(), renderPosition.BEFOREEND);
 const tripEventList = tripEventsSection.querySelector('.trip-events__list');
-renderEvents(tripEventList, wayPoints);
+
+
+if(wayPoints.length > 0) {
+  //Маршрут и стоимость
+  render(tripMain, new TripInfoView().getElement(), renderPosition.AFTERBEGIN);
+  const tripInfo = pageHeader.querySelector('.trip-info');
+  render(tripInfo, new TripInfoMainView(getPointCities(wayPoints), 'no period yet').getElement(), renderPosition.BEFOREEND);
+  render(tripInfo, new TripInfoCostView(getEventPriceSum(wayPoints)).getElement(), renderPosition.BEFOREEND);
+
+  renderEvents(tripEventList, wayPoints);
+} else {
+  render(tripEventList, new NoEventsComponentView().getElement(), renderPosition.AFTERBEGIN);
+}
