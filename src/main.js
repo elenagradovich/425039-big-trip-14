@@ -12,9 +12,10 @@ import TripEditEventView from './views/trip-edit-event';
 import NoEventsComponentView from './views/trip-no-events';
 
 import { generateWaypoint } from './mock/waypoint.js';
-import { menuParameters, sortParameters, filterParameters, types, cities, renderPosition } from './const';
+import {filterParameters, menuParameters, renderPosition, sortParameters} from './const';
 
 import { getEventPriceSum, getPointCities, getRandomValue, render } from './utils';
+import {cities, types} from './mock/mock-data';
 
 const TASK_AMOUNT = 20;
 const wayPoints = new Array(TASK_AMOUNT).fill().map(generateWaypoint);

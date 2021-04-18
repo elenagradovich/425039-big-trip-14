@@ -1,5 +1,5 @@
 import { getDate, createElement } from '../utils';
-import { typeIcons } from '../const';
+import {typeIcons} from '../mock/mock-data';
 
 const createTripEditEventTemplate = (cities, types, event = {}) => {
   const {

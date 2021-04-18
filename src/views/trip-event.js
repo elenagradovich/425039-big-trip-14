@@ -1,5 +1,5 @@
 import {createElement, getDate, getPeriod} from '../utils';
-import { typeIcons } from '../const';
+import {typeIcons} from '../mock/mock-data';
 
 const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
   const { name } = destination;
