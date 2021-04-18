@@ -1,7 +1,7 @@
-import { getDate } from '../utils';
-import { typeIcons } from '../const';
+import { getDate, createElement } from '../utils';
+import {typeIcons} from '../mock/mock-data';
 
-export const tripEditEventTemplate = (cities, types, event = {}) => {
+const createTripEditEventTemplate = (cities, types, event = {}) => {
   const {
     basePrice = '',
     dateFrom =  '',
@@ -17,12 +17,14 @@ export const tripEditEventTemplate = (cities, types, event = {}) => {
     pictures = '',
   } = destination;
 
-  const createTypeTemplates = ( activeType ) => types.map((type) => `<div class="event__type-item">
+  const createTypeTemplates = ( activeType ) => {
+    return types.map((type) => `<div class="event__type-item">
       <input id="event-type-${type.toLowerCase()}-1" class="event__type-input visually-hidden"
         type="radio" name="event-type" value="${type.toLowerCase()}"
         ${activeType.toLowerCase() === type.toLowerCase() ? 'checked' : ''}>
       <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
     </div>`).join(' ');
+  };
 
   const createOffersTemplate = () => {
     return offers && offers.map((offer) =>
@@ -126,3 +128,27 @@ export const tripEditEventTemplate = (cities, types, event = {}) => {
               </form>
             </li>`;
 };
+
+export default class TripEditEvent {
+  constructor(cities, types, event = {}) {
+    this._element = null;
+    this._cities = cities;
+    this._types = types;
+    this._event = event;
+  }
+
+  getTemplate () {
+    return createTripEditEventTemplate(this._cities, this._types, this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement () {
+    this.element = null;
+  }
+}

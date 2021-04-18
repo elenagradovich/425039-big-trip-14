@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import { offerList } from'./const';
+import { renderPosition } from'./const';
+import {offerList} from './mock/mock-data';
 
 export const getRandomValue = (maxLength = 1, minLength = 0) => {
   const lower = Math.ceil(Math.min(minLength, maxLength));
@@ -53,3 +54,21 @@ export const getEventPriceSum = (eventPoints) => {
 };
 
 export const getPeriod = (dateFrom, dateTo) => `${getDate(dateFrom, 'date_full')} - ${getDate(dateTo,'date_full')}`;
+
+export const createElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
+
+export const render = (container, template, place) => {
+  switch (place) {
+    case renderPosition.BEFOREEND:
+      return container.append(template);
+    case renderPosition.AFTERBEGIN:
+      return container.prepend(template); }
+};
+
+export const renderTemplate = (container, template, place= renderPosition.BEFOREEND) => {
+  container.insertAdjacentHTML(place, template);
+};

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
-import { types, cities, descriptions } from '../const';
 import { getRandomValue, getOffers } from '../utils';
+import {cities, descriptions, types} from './mock-data';
 
 
 const MAX_PHOTO_INDEX = 50;

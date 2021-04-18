@@ -1,6 +1,6 @@
-import { sortParameters } from '../const';
+import {createElement} from '../utils';
 
-export const tripSortTemplate = ( activeParam ) => {
+const createTripSortTemplate = (sortParameters, activeParam) => {
   const createSortTemplates = sortParameters.map((sortParam) => `<div class="trip-sort__item  trip-sort__item--${sortParam}">
               <input id="sort-${sortParam}" class="trip-sort__input  visually-hidden"
                 type="radio" name="trip-sort"
@@ -13,3 +13,26 @@ export const tripSortTemplate = ( activeParam ) => {
           ${createSortTemplates}
           </form>`;
 };
+
+export default class TripSort {
+  constructor(sortParameters, activeParam) {
+    this._element = null;
+    this._sortParameters = sortParameters;
+    this._activeParam = activeParam;
+  }
+
+  getTemplate () {
+    return createTripSortTemplate(this._sortParameters, this._activeParam);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement () {
+    this.element = null;
+  }
+}
