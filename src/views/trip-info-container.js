@@ -1,4 +1,5 @@
 import {createElement} from '../utils';
+import Abstract from './abstract';
 
 const createTripInfoTemplate = () => '<section class="trip-main__trip-info  trip-info"></section>';
 

@@ -1,4 +1,5 @@
 import {createElement} from '../utils';
+import Abstract from './abstract';
 
 const createTripEventListTemplate = () => {
   return `<ul class="trip-events__list">

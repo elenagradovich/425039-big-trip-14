@@ -1,4 +1,5 @@
 import {createElement} from '../utils';
+import Abstract from './abstract';
 
 const createTripSortTemplate = (sortParameters, activeParam) => {
   const createSortTemplates = sortParameters.map((sortParam) => `<div class="trip-sort__item  trip-sort__item--${sortParam}">

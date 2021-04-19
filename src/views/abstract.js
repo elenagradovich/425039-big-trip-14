@@ -1,15 +1,15 @@
 import {createElement} from '../utils';
-import Abstract from './abstract';
 
-const createNoEventsTemplate = () => '<p class="trip-events__msg">Click New Event to create your first point</p>';
-
-export default class NoEventsComponent {
+export default class Abstract {
   constructor() {
+    if(new.target === Abstract) {
+      throw new Error('Can\'t instantiate Abstract, only concrete one.');
+    }
     this._element = null;
   }
 
   getTemplate () {
-    return createNoEventsTemplate();
+    throw new Error('Abstract method not implemented: getTemplate');
   }
 
   getElement() {
@@ -23,3 +23,4 @@ export default class NoEventsComponent {
     this.element = null;
   }
 }
+

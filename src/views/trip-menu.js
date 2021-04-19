@@ -1,4 +1,5 @@
 import {createElement} from '../utils';
+import Abstract from './abstract';
 
 const createTripMenuTemplate = (menuParameters, activeType) => {
   const createMenuTemplates = menuParameters.map((menuParam) => `<a class="trip-tabs__btn  ${activeType === menuParam ? 'trip-tabs__btn--active' : ''} href="#">

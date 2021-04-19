@@ -1,4 +1,5 @@
 import {createElement} from '../utils';
+import Abstract from './abstract';
 
 const createTripInfoMainTemplate = (cities, period) => {
   return `<div class="trip-info__main">

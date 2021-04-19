@@ -1,4 +1,5 @@
 import {createElement} from '../utils';
+import Abstract from './abstract';
 
 const createrTripFiltersTemplate = (filterParameters, activeParam) => {
   const createFilterTemplates = filterParameters.map((filterParam) => `<div class="trip-filters__filter">

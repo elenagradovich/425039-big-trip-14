@@ -1,4 +1,5 @@
 import {createElement} from '../utils';
+import Abstract from './abstract';
 
 const createTripInfoCostTemplate = (cost) => {
   return `<p class="trip-info__cost">
