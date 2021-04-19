@@ -1,4 +1,3 @@
-import {createElement} from '../utils';
 import Abstract from './abstract';
 
 const createTripEventListTemplate = () => {
@@ -7,23 +6,12 @@ const createTripEventListTemplate = () => {
           </ul>`;
 };
 
-export default class TripEventList {
+export default class TripEventList extends Abstract{
   constructor() {
-    this._element = null;
+    super();
   }
 
   getTemplate () {
     return createTripEventListTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement () {
-    this.element = null;
   }
 }

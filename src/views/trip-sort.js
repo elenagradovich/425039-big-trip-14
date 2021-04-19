@@ -1,4 +1,3 @@
-import {createElement} from '../utils';
 import Abstract from './abstract';
 
 const createTripSortTemplate = (sortParameters, activeParam) => {
@@ -15,25 +14,14 @@ const createTripSortTemplate = (sortParameters, activeParam) => {
           </form>`;
 };
 
-export default class TripSort {
+export default class TripSort extends Abstract{
   constructor(sortParameters, activeParam) {
-    this._element = null;
+    super();
     this._sortParameters = sortParameters;
     this._activeParam = activeParam;
   }
 
   getTemplate () {
     return createTripSortTemplate(this._sortParameters, this._activeParam);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement () {
-    this.element = null;
   }
 }

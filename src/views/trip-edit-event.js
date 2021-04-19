@@ -1,4 +1,4 @@
-import { getDate, createElement } from '../utils';
+import { getDate } from '../utils';
 import {typeIcons} from '../mock/mock-data';
 import Abstract from './abstract';
 
@@ -130,9 +130,9 @@ const createTripEditEventTemplate = (cities, types, event = {}) => {
             </li>`;
 };
 
-export default class TripEditEvent {
+export default class TripEditEvent extends Abstract {
   constructor(cities, types, event = {}) {
-    this._element = null;
+    super();
     this._cities = cities;
     this._types = types;
     this._event = event;
@@ -140,16 +140,5 @@ export default class TripEditEvent {
 
   getTemplate () {
     return createTripEditEventTemplate(this._cities, this._types, this._event);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement () {
-    this.element = null;
   }
 }

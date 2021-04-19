@@ -1,4 +1,4 @@
-import {createElement, getDate, getPeriod} from '../utils';
+import {getDate, getPeriod} from '../utils';
 import {typeIcons} from '../mock/mock-data';
 import Abstract from './abstract';
 
@@ -56,24 +56,13 @@ const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offe
           </li>`;
 };
 
-export default class TripEvent {
+export default class TripEvent extends Abstract{
   constructor(event) {
-    this._element = null;
+    super();
     this._event = event;
   }
 
   getTemplate () {
     return createTripEventTemplate(this._event);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement () {
-    this.element = null;
   }
 }

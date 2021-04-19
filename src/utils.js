@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { renderPosition } from'./const';
+import {renderPosition} from'./const';
 import {offerList} from './mock/mock-data';
 
 export const getRandomValue = (maxLength = 1, minLength = 0) => {
