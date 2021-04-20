@@ -1,5 +1,6 @@
-import {createElement, getDate, getPeriod} from '../utils';
+import {getDate, getPeriod} from '../utils/common';
 import {typeIcons} from '../mock/mock-data';
+import Abstract from './abstract';
 
 const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
   const { name } = destination;
@@ -55,24 +56,26 @@ const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offe
           </li>`;
 };
 
-export default class TripEvent {
+export default class TripEvent extends Abstract{
   constructor(event) {
-    this._element = null;
+    super();
     this._event = event;
+
+    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
   }
 
   getTemplate () {
     return createTripEventTemplate(this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
+  _rollupButtonClickHandler (evt) {
+    evt.preventDefault();
+    this._callback.rollupButtonClickHandler();
   }
 
-  removeElement () {
-    this.element = null;
+  setRollupButtonClickHandler (callback) {
+    this._callback.rollupButtonClickHandler = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
   }
+
 }

@@ -1,5 +1,6 @@
-import { getDate, createElement } from '../utils';
+import { getDate } from '../utils/common';
 import {typeIcons} from '../mock/mock-data';
+import Abstract from './abstract';
 
 const createTripEditEventTemplate = (cities, types, event = {}) => {
   const {
@@ -129,26 +130,38 @@ const createTripEditEventTemplate = (cities, types, event = {}) => {
             </li>`;
 };
 
-export default class TripEditEvent {
+export default class TripEditEvent extends Abstract {
   constructor(cities, types, event = {}) {
-    this._element = null;
+    super();
     this._cities = cities;
     this._types = types;
     this._event = event;
+
+    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
+    this._submitClickHandler = this._submitClickHandler.bind(this);
   }
 
   getTemplate () {
     return createTripEditEventTemplate(this._cities, this._types, this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
+  _rollupButtonClickHandler (evt) {
+    evt.preventDefault();
+    this._callback.rollupButtonClickHandler();
   }
 
-  removeElement () {
-    this.element = null;
+  setRollupButtonClickHandler (callback) {
+    this._callback.rollupButtonClickHandler = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
+  }
+
+  _submitClickHandler (evt) {
+    evt.preventDefault();
+    this._callback.submitClickHandler();
+  }
+
+  setSubmitClickHandler (callback) {
+    this._callback.submitClickHandler = callback;
+    this.getElement().querySelector('.event--edit').addEventListener('submit', this._submitClickHandler);
   }
 }

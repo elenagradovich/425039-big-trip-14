@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import Abstract from './abstract';
 
 const createrTripFiltersTemplate = (filterParameters, activeParam) => {
   const createFilterTemplates = filterParameters.map((filterParam) => `<div class="trip-filters__filter">
@@ -14,26 +14,15 @@ const createrTripFiltersTemplate = (filterParameters, activeParam) => {
           </form>`;
 };
 
-export default class TripFilters {
+export default class TripFilters extends Abstract{
   constructor(filterParameters, activeParam) {
-    this._element = null;
+    super();
     this._filterParameters = filterParameters;
     this._activeParam = activeParam;
   }
 
   getTemplate () {
     return createrTripFiltersTemplate(this._filterParameters, this._activeParam);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement () {
-    this.element = null;
   }
 }
 
