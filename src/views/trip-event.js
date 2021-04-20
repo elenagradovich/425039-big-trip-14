@@ -1,4 +1,4 @@
-import {getDate, getPeriod} from '../utils';
+import {getDate, getPeriod} from '../utils/common';
 import {typeIcons} from '../mock/mock-data';
 import Abstract from './abstract';
 
@@ -60,9 +60,22 @@ export default class TripEvent extends Abstract{
   constructor(event) {
     super();
     this._event = event;
+
+    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
   }
 
   getTemplate () {
     return createTripEventTemplate(this._event);
   }
+
+  _rollupButtonClickHandler (evt) {
+    evt.preventDefault();
+    this._callback.rollupButtonClickHandler();
+  }
+
+  setRollupButtonClickHandler (callback) {
+    this._callback.rollupButtonClickHandler = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
+  }
+
 }

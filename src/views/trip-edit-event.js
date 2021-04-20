@@ -1,4 +1,4 @@
-import { getDate } from '../utils';
+import { getDate } from '../utils/common';
 import {typeIcons} from '../mock/mock-data';
 import Abstract from './abstract';
 
@@ -136,9 +136,32 @@ export default class TripEditEvent extends Abstract {
     this._cities = cities;
     this._types = types;
     this._event = event;
+
+    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
+    this._submitClickHandler = this._submitClickHandler.bind(this);
   }
 
   getTemplate () {
     return createTripEditEventTemplate(this._cities, this._types, this._event);
+  }
+
+  _rollupButtonClickHandler (evt) {
+    evt.preventDefault();
+    this._callback.rollupButtonClickHandler();
+  }
+
+  setRollupButtonClickHandler (callback) {
+    this._callback.rollupButtonClickHandler = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
+  }
+
+  _submitClickHandler (evt) {
+    evt.preventDefault();
+    this._callback.submitClickHandler();
+  }
+
+  setSubmitClickHandler (callback) {
+    this._callback.submitClickHandler = callback;
+    this.getElement().querySelector('.event--edit').addEventListener('submit', this._submitClickHandler);
   }
 }

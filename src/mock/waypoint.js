@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { getRandomValue, getOffers } from '../utils';
+import { getRandomValue, getOffers } from '../utils/common';
 import {cities, descriptions, types} from './mock-data';
 
 
