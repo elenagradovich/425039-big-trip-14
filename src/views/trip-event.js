@@ -77,5 +77,4 @@ export default class TripEvent extends Abstract{
     this._callback.rollupButtonClickHandler = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
   }
-
 }

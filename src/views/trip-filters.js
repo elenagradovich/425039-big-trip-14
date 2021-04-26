@@ -1,6 +1,6 @@
 import Abstract from './abstract';
 
-const createrTripFiltersTemplate = (filterParameters, activeParam) => {
+const createrTripFiltersTemplate = (filterParameters, activeParam = filterParameters[0]) => {
   const createFilterTemplates = filterParameters.map((filterParam) => `<div class="trip-filters__filter">
               <input id="filter-${filterParam}" class="trip-filters__filter-input  visually-hidden"
                 type="radio" name="trip-filter" value="${filterParam}"

@@ -1,3 +1,7 @@
+import { filterParameters, navParameters, sortParameters } from '../const';
+import { getRandomValue } from '../utils/common';
+import { generateWaypoint } from './waypoint';
+
 export const types = ['check-in', 'sightseeing', 'restaurant',
   'taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight'];
 
@@ -138,3 +142,15 @@ export const typeIcons = new Map(Object.entries({
   'drive': 'img/icons/transport.png',
 }));
 
+//Navigation
+export const activeNavParam = navParameters[getRandomValue(navParameters.length-1)];
+
+//Sort
+export const activeSortParam = sortParameters[getRandomValue(sortParameters.length-1)];
+
+//Filters
+export const activeFilterParam = filterParameters[getRandomValue(filterParameters.length-1)];
+
+//Points data
+const TASK_AMOUNT = 20;
+export const wayPoints = new Array(TASK_AMOUNT).fill().map(generateWaypoint);

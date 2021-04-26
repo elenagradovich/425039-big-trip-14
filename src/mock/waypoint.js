@@ -19,7 +19,7 @@ const generateDate = (date) => {
 };
 
 const generateType =  () => {
-  return types[getRandomValue(types.length - 1)];
+  return types[0];
 };
 
 export const generateWaypoint = () => {
