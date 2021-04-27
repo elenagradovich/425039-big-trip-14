@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {offerList} from '../mock/mock-data';
+import {offerList} from '../mock/data';
 
 export const getRandomValue = (maxLength = 1, minLength = 0) => {
   const lower = Math.ceil(Math.min(minLength, maxLength));

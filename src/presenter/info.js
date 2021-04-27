@@ -9,12 +9,13 @@ import { getEventPriceSum, getPointCities } from '../utils/common';
 export default class InfoPresenter {
   constructor(container) {
     this._container = container;
-    this._elementWrapper = new TripInfoView();
+    this._elementWrapper = null;
     this._cities = [];
     this._cost = null;
   }
 
   init(points) {
+    this._elementWrapper = new TripInfoView();
     this._points = points;
     render(this._container, this._elementWrapper, renderPosition.AFTERBEGIN);
     this._renderCostInfo();

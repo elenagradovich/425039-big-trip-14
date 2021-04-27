@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
 
 import { getRandomValue, getOffers } from '../utils/common';
-import {cities, descriptions, types} from './mock-data';
+import {cities, descriptions, types} from './data';
 
 
 const MAX_PHOTO_INDEX = 50;
@@ -26,6 +27,7 @@ export const generateWaypoint = () => {
   const type = generateType();
   const offers =  getOffers(type);
   return {
+    id: nanoid(),
     basePrice: getRandomValue(100),
     dateFrom: generateDate(),
     dateTo: generateDate(),

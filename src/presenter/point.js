@@ -1,51 +1,75 @@
 import TripEventView from '../views/trip-event';
 import TripEditEventView from '../views/trip-edit-event';
-import { render, replace } from '../utils/render';
+import { remove, render, replace } from '../utils/render';
 import { renderPosition } from '../const';
 
 export default class Point {
-  constructor(containerPointList) {
-    this._containerPointList = containerPointList;
+  constructor(container) {
+    this._container = container;
     this._tripEventComponent = null;
     this._tripEditEventComponent = null;
 
-    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
-    this._openEventHandler = this._openEventHandler.bind(this);
-    this._closeEventHandler = this._closeEventHandler.bind(this);
-    this._submitClickHandler = this._submitClickHandler.bind(this);
+    this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+    this._handleEventOpen = this._handleEventOpen.bind(this);
+    this._handleEventClose = this._handleEventClose.bind(this);
+    this._handleSubmitClick = this._handleSubmitClick.bind(this);
   }
 
   init(point, cities, types) {
+    this._prevPoint = this._tripEventComponent;
+    this._prevEditPoint = this._tripEditEventComponent;
     this._tripEventComponent = new TripEventView(point);
     this._tripEditEventComponent = new TripEditEventView(cities, types, point);
+    this._tripEventComponent.setRollupButtonClickHandler(this._handleEventOpen);
+    this._tripEditEventComponent.setRollupButtonClickHandler(this._handleEventClose);
+    this._tripEditEventComponent.setSubmitClickHandler(this._handleSubmitClick);
 
-    this._tripEventComponent.setRollupButtonClickHandler(this._openEventHandler);
-    this._tripEditEventComponent.setRollupButtonClickHandler(this._closeEventHandler);
-    this._tripEditEventComponent.setSubmitClickHandler(this._submitClickHandler);
+    if(this._prevPoint === null && this._prevEditPoint === null) {
+      render(this._container, this._tripEventComponent, renderPosition.BEFOREEND);
+      return;
+    }
 
-    render(this._containerPointList, this._tripEventComponent, renderPosition.BEFOREEND);
+    if(this._container.getElement().contains(this._prevPoint.getElement())) {
+      render(this._container, this._tripEventComponent, renderPosition.BEFOREEND);
+    }
+
+    remove(this._prevPoint);
+    remove(this._prevEditPoint);
   }
 
-  _escKeyDownHandler (evt) {
+  _replaceEventToEditEvent () {
+    replace(this._tripEditEventComponent, this._tripEventComponent);
+  }
+
+  _replaceEditEventToEvent () {
+    replace(this._tripEventComponent, this._tripEditEventComponent);
+  }
+
+  _handleEscKeyDown (evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      replace(this._tripEventComponent, this._tripEditEventComponent);
-      document.removeEventListener('keydown', this._escKeyDownHandler);
+      this._replaceEditEventToEvent();
+      document.removeEventListener('keydown', this._handleEscKeyDown);
     }
   }
 
-  _openEventHandler () {
-    replace(this._tripEditEventComponent, this._tripEventComponent);
-    document.addEventListener('keydown', this._escKeyDownHandler);
+  _handleEventOpen () {
+    this._replaceEventToEditEvent();
+    document.addEventListener('keydown', this._handleEscKeyDown);
   }
 
-  _closeEventHandler () {
-    replace(this._tripEventComponent, this._tripEditEventComponent);
-    document.removeEventListener('keydown', this._escKeyDownHandler);
+  _handleEventClose () {
+    this._replaceEditEventToEvent();
+    document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
-  _submitClickHandler () {
-    replace(this._tripEventComponent, this._tripEditEventComponent);
-    document.removeEventListener('keydown', this._escKeyDownHandler);
+  _handleSubmitClick () {
+    this._replaceEditEventToEvent();
+    document.removeEventListener('keydown', this._handleEscKeyDown);
+  }
+
+  destroy () {
+    remove(this._tripEventComponent);
+    remove(this._tripEditEventComponent);
   }
 }

@@ -1,4 +1,4 @@
-import { cities, types, wayPoints, activeFilterParam, activeSortParam, activeNavParam } from './mock/mock-data';
+import { cities, types, wayPoints, activeFilterParam, activeSortParam, activeNavParam } from './mock/data';
 
 const tripEventsContainer = document.querySelector('.trip-events');
 const tripMainContainer = document.querySelector('.trip-main');

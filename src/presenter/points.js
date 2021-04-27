@@ -6,10 +6,11 @@ import { renderPosition } from '../const';
 export default class Points {
   constructor(container) {
     this._container = container;
-    this._pointsComponent = new TripEventListView();
+    this._pointsComponent = null;
   }
 
   init(points, cities, types) {
+    this._pointsComponent = new TripEventListView();
     this._points = points;
     this._cities = cities;
     this._types = types;

@@ -1,5 +1,5 @@
 import {getDate, getPeriod} from '../utils/common';
-import {typeIcons} from '../mock/mock-data';
+import {typeIcons} from '../mock/data';
 import Abstract from './abstract';
 
 const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
@@ -60,7 +60,6 @@ export default class TripEvent extends Abstract{
   constructor(event) {
     super();
     this._event = event;
-
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
   }
 
