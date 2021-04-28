@@ -11,6 +11,7 @@ export default class Points {
     this._pointPresenter = {};
 
     this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(points, cities, types) {
@@ -27,11 +28,17 @@ export default class Points {
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 
+  _handleModeChange() {
+    Object.values(this._pointPresenter).forEach((presenter) => presenter.resetView());
+  }
+
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointsComponent, this._cities, this._types, this._handlePointChange);
+    const pointPresenter = new PointPresenter(this._pointsComponent, this._cities, this._types,
+      this._handlePointChange, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
+
 
   _renderPoints() {
     for (const point of this._points) {
