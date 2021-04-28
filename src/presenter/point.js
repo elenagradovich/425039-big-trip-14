@@ -4,48 +4,60 @@ import { remove, render, replace } from '../utils/render';
 import { renderPosition } from '../const';
 
 export default class Point {
-  constructor(container) {
+  constructor(container, cities, types, changeData) {
     this._container = container;
     this._tripEventComponent = null;
     this._tripEditEventComponent = null;
+    this._cities = cities;
+    this._types = types;
+    this._changeData = changeData;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handleEventOpen = this._handleEventOpen.bind(this);
     this._handleEventClose = this._handleEventClose.bind(this);
     this._handleSubmitClick = this._handleSubmitClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
-  init(point, cities, types) {
+  init(point) {
+    this._point = point;
     this._prevPoint = this._tripEventComponent;
     this._prevEditPoint = this._tripEditEventComponent;
     this._tripEventComponent = new TripEventView(point);
-    this._tripEditEventComponent = new TripEditEventView(cities, types, point);
+    this._tripEditEventComponent = new TripEditEventView(point, this._cities, this._types);
+
     this._tripEventComponent.setRollupButtonClickHandler(this._handleEventOpen);
     this._tripEditEventComponent.setRollupButtonClickHandler(this._handleEventClose);
     this._tripEditEventComponent.setSubmitClickHandler(this._handleSubmitClick);
 
-    if(this._prevPoint === null && this._prevEditPoint === null) {
+    this._tripEventComponent.setFavouriteButtonClickHandler(this._handleFavoriteClick);
+
+    if (this._prevPoint === null && this._prevEditPoint === null) {
       render(this._container, this._tripEventComponent, renderPosition.BEFOREEND);
       return;
     }
 
-    if(this._container.getElement().contains(this._prevPoint.getElement())) {
-      render(this._container, this._tripEventComponent, renderPosition.BEFOREEND);
+    if (this._container.getElement().contains(this._prevPoint.getElement())) {
+      replace(this._tripEventComponent, this._prevPoint);
+    }
+
+    if (this._container.getElement().contains(this._prevEditPoint.getElement())) {
+      replace(this._tripEditEventComponent, this._prevEditPoint);
     }
 
     remove(this._prevPoint);
     remove(this._prevEditPoint);
   }
 
-  _replaceEventToEditEvent () {
+  _replaceEventToEditEvent() {
     replace(this._tripEditEventComponent, this._tripEventComponent);
   }
 
-  _replaceEditEventToEvent () {
+  _replaceEditEventToEvent() {
     replace(this._tripEventComponent, this._tripEditEventComponent);
   }
 
-  _handleEscKeyDown (evt) {
+  _handleEscKeyDown(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this._replaceEditEventToEvent();
@@ -53,23 +65,26 @@ export default class Point {
     }
   }
 
-  _handleEventOpen () {
+  _handleEventOpen() {
     this._replaceEventToEditEvent();
     document.addEventListener('keydown', this._handleEscKeyDown);
   }
 
-  _handleEventClose () {
+  _handleEventClose() {
     this._replaceEditEventToEvent();
     document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
-  _handleSubmitClick () {
+  _handleSubmitClick() {
     this._replaceEditEventToEvent();
     document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
-  destroy () {
-    remove(this._tripEventComponent);
-    remove(this._tripEditEventComponent);
+  _handleFavoriteClick() {
+    this._changeData(
+      Object.assign({}, this._point, {isFavorite: !this._point.isFavorite},
+      ),
+    );
   }
 }
+

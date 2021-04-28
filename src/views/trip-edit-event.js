@@ -131,7 +131,7 @@ const createTripEditEventTemplate = (cities, types, event = {}) => {
 };
 
 export default class TripEditEvent extends Abstract {
-  constructor(cities, types, event = {}) {
+  constructor(event = {}, cities, types) {
     super();
     this._cities = cities;
     this._types = types;

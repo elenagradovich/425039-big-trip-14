@@ -61,6 +61,7 @@ export default class TripEvent extends Abstract{
     super();
     this._event = event;
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
+    this._favoriteButtonClickHandler = this._favoriteButtonClickHandler.bind(this);
   }
 
   getTemplate () {
@@ -75,5 +76,15 @@ export default class TripEvent extends Abstract{
   setRollupButtonClickHandler (callback) {
     this._callback.rollupButtonClickHandler = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
+  }
+
+  _favoriteButtonClickHandler (evt) {
+    evt.preventDefault();
+    this._callback.favoriteButtonClickHandler();
+  }
+
+  setFavouriteButtonClickHandler (callback) {
+    this._callback.favoriteButtonClickHandler = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteButtonClickHandler);
   }
 }
