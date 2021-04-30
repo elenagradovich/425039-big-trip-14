@@ -1,5 +1,5 @@
 import { getDate } from '../utils/common';
-import {typeIcons} from '../mock/mock-data';
+import {typeIcons} from '../mock/data';
 import Abstract from './abstract';
 
 const createTripEditEventTemplate = (cities, types, event = {}) => {
@@ -131,7 +131,7 @@ const createTripEditEventTemplate = (cities, types, event = {}) => {
 };
 
 export default class TripEditEvent extends Abstract {
-  constructor(cities, types, event = {}) {
+  constructor(event = {}, cities, types) {
     super();
     this._cities = cities;
     this._types = types;

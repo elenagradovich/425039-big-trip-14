@@ -1,6 +1,6 @@
 import Abstract from './abstract';
 
-const createTripSortTemplate = (sortParameters, activeParam) => {
+const createTripSortTemplate = (sortParameters, activeParam = sortParameters[0]) => {
   const createSortTemplates = sortParameters.map((sortParam) => `<div class="trip-sort__item  trip-sort__item--${sortParam}">
               <input id="sort-${sortParam}" class="trip-sort__input  visually-hidden"
                 type="radio" name="trip-sort"
