@@ -1,4 +1,4 @@
-import { renderPosition, filterParameters } from '../const';
+import { RenderPosition, FilterParameters } from '../const';
 import TripFiltersView from '../views/trip-filters';
 import { render } from '../utils/render';
 
@@ -9,8 +9,8 @@ export default class FilterPresenter {
   }
 
   init(activeParameter) {
-    this._element = new TripFiltersView(filterParameters, this._activeParameter);
+    this._element = new TripFiltersView(FilterParameters, this._activeParameter);
     this._activeParameter = activeParameter;
-    render(this._container, this._element, renderPosition.BEFOREEND);
+    render(this._container, this._element, RenderPosition.BEFOREEND);
   }
 }

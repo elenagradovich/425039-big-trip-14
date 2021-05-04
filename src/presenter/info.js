@@ -1,4 +1,4 @@
-import { renderPosition } from '../const';
+import { RenderPosition } from '../const';
 import { render } from '../utils/render';
 import TripInfoView from '../views/trip-info-container';
 import TripInfoMainView from '../views/trip-info-main';
@@ -17,7 +17,7 @@ export default class InfoPresenter {
   init(points) {
     this._elementWrapper = new TripInfoView();
     this._points = points;
-    render(this._container, this._elementWrapper, renderPosition.AFTERBEGIN);
+    render(this._container, this._elementWrapper, RenderPosition.AFTERBEGIN);
     this._renderCostInfo();
     this._renderCitiesInfo();
   }
@@ -33,12 +33,12 @@ export default class InfoPresenter {
   _renderCostInfo() {
     this._getCost(this._points);
     const tripInfoCost = new TripInfoCostView(this._cost);
-    render(this._elementWrapper, tripInfoCost, renderPosition.AFTERBEGIN);
+    render(this._elementWrapper, tripInfoCost, RenderPosition.AFTERBEGIN);
   }
 
   _renderCitiesInfo() {
     this._getCities(this._points);
     const tripInfoMain = new TripInfoMainView(this._cities);
-    render(this._elementWrapper, tripInfoMain, renderPosition.AFTERBEGIN);
+    render(this._elementWrapper, tripInfoMain, RenderPosition.AFTERBEGIN);
   }
 }

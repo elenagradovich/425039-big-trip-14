@@ -1,15 +1,23 @@
-export const renderPosition = {
+export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
 };
 
-export const filterParameters = ['Everything', 'Future', 'Past'];
+export const FilterParameters = ['Everything', 'Future', 'Past'];
 
-export const sortParameters = ['Day', 'Event', 'Time', 'Price', 'Offer'];
+export const NavParameters = ['Stats', 'Table'];
 
-export const navParameters = ['Stats', 'Table'];
-
-export const mode = {
+export const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
 };
+
+export const SortTypes = {
+  DAY: 'Day',
+  EVENT: 'Event',
+  TIME: 'Time',
+  PRICE: 'Price',
+  OFFER: 'Offer',
+};
+
+

@@ -1,7 +1,7 @@
 import TripEventView from '../views/trip-event';
 import TripEditEventView from '../views/trip-edit-event';
 import { remove, render, replace } from '../utils/render';
-import { renderPosition, mode } from '../const';
+import { RenderPosition, Mode } from '../const';
 
 export default class Point {
   constructor(container, cities, types, changeData, changeMode) {
@@ -13,7 +13,7 @@ export default class Point {
     this._changeData = changeData;
 
     this._changeMode = changeMode;
-    this._mode = mode.DEFAULT;
+    this._mode = Mode.DEFAULT;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handleEventOpen = this._handleEventOpen.bind(this);
@@ -36,7 +36,7 @@ export default class Point {
     this._tripEventComponent.setFavouriteButtonClickHandler(this._handleFavoriteClick);
 
     if (this._prevPoint === null && this._prevEditPoint === null) {
-      render(this._container, this._tripEventComponent, renderPosition.BEFOREEND);
+      render(this._container, this._tripEventComponent, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -55,12 +55,12 @@ export default class Point {
   _replaceEventToEditEvent() {
     replace(this._tripEditEventComponent, this._tripEventComponent);
     this._changeMode();
-    this._mode = mode.EDITING;
+    this._mode = Mode.EDITING;
   }
 
   _replaceEditEventToEvent() {
     replace(this._tripEventComponent, this._tripEditEventComponent);
-    this._mode = mode.DEFAULT;
+    this._mode = Mode.DEFAULT;
   }
 
   _handleEscKeyDown(evt) {
@@ -95,9 +95,14 @@ export default class Point {
   }
 
   resetView() {
-    if(this._mode !== mode.DEFAULT) {
+    if(this._mode !== Mode.DEFAULT) {
       this._replaceEditEventToEvent();
     }
+  }
+
+  destroy() {
+    remove(this._tripEventComponent);
+    remove(this._tripEditEventComponent);
   }
 }
 
