@@ -1,5 +1,5 @@
 import Abstract from '../views/abstract';
-import { renderPosition } from '../const';
+import { RenderPosition } from '../const';
 
 export const replace = (newChild, oldChild) => {
   if(oldChild instanceof Abstract) {
@@ -29,14 +29,14 @@ export const render = (container, child, place) => {
   }
 
   switch (place) {
-    case renderPosition.BEFOREEND:
+    case RenderPosition.BEFOREEND:
       return container.append(child);
-    case renderPosition.AFTERBEGIN:
+    case RenderPosition.AFTERBEGIN:
       return container.prepend(child);
   }
 };
 
-export const renderTemplate = (container, template, place = renderPosition.BEFOREEND) => {
+export const renderTemplate = (container, template, place = RenderPosition.BEFOREEND) => {
   container.insertAdjacentHTML(place, template);
 };
 

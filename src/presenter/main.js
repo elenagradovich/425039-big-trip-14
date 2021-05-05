@@ -4,8 +4,9 @@ import FilterPresenter from '../presenter/filters';
 import SortPresenter from '../presenter/sort';
 import NavigationPresenter from '../presenter/navigation';
 import InfoPresenter from '../presenter/info';
+import SortPublisher from '../utils/sort-publisher';
 
-import { renderPosition } from '../const';
+import { RenderPosition } from '../const';
 import { render } from '../utils/render';
 
 
@@ -15,14 +16,14 @@ export default class Main {
     this._navigationContainer = navigationContainer;
     this._filtersContainer = filtersContainer;
     this._tripMainContainer = tripMainContainer;
+    this._sortPublisher = new SortPublisher();
   }
 
-  init (wayPoints, cities, types, activeFilterParam, activeSortParam, activeNavParam) {
+  init (wayPoints, cities, types, activeFilterParam, activeNavParam) {
     this._points = wayPoints;
     this._cities = cities;
     this._types = types;
     this._activeFilterParam = activeFilterParam;
-    this._activeSortParam = activeSortParam;
     this._activeNavParam = activeNavParam;
 
     this._renderElements();
@@ -41,13 +42,13 @@ export default class Main {
   }
 
   _renderPoints () {
-    const pointsPresenter = new PointPresenter(this._tripContainer);
+    const pointsPresenter = new PointPresenter(this._tripContainer, this._sortPublisher);
     pointsPresenter.init(this._points, this._cities, this._types );
   }
 
   _renderSort () {
-    const sortPresenter = new SortPresenter(this._tripContainer);
-    sortPresenter.init(this._activeSortParam);
+    const sortPresenter = new SortPresenter(this._tripContainer, this._sortPublisher);
+    sortPresenter.init();
   }
 
   _renderNavigation () {
@@ -67,7 +68,7 @@ export default class Main {
 
   _renderNoPoins () {
     const noPoinsElement = new NoEventsComponentView();
-    render(this._tripContainer, noPoinsElement, renderPosition.BEFOREEND);
+    render(this._tripContainer, noPoinsElement, RenderPosition.BEFOREEND);
   }
 }
 

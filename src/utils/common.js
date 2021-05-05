@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {offerList} from '../mock/data';
+import { offerList } from '../mock/data';
 
 export const getRandomValue = (maxLength = 1, minLength = 0) => {
   const lower = Math.ceil(Math.min(minLength, maxLength));
@@ -74,3 +74,10 @@ export const updateItem = (items, update) => {
   ];
 };
 
+export const sortPointsTime = (pointPrev, pointNext) => {
+  const periodPrev = dayjs(pointPrev.dateTo).diff(dayjs(pointPrev.dateFrom), 'second');
+  const periodNext = dayjs(pointNext.dateTo).diff(dayjs(pointNext.dateFrom), 'second');
+  return periodNext - periodPrev;
+};
+
+export const sortPointsPrice = (pointPrev, pointNext) => pointPrev.basePrice - pointNext.basePrice;
