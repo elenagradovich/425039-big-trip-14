@@ -4,14 +4,15 @@ import { remove, render, replace } from '../utils/render';
 import { RenderPosition, Mode } from '../const';
 
 export default class Point {
-  constructor(container, cities, types, changeData, changeMode) {
+  constructor(container, cities, types, destinations, offers, changeData, changeMode) {
     this._container = container;
     this._tripEventComponent = null;
     this._tripEditEventComponent = null;
     this._cities = cities;
     this._types = types;
+    this._destinations = destinations;
+    this._offers = offers;
     this._changeData = changeData;
-
     this._changeMode = changeMode;
     this._mode = Mode.DEFAULT;
 
@@ -27,7 +28,7 @@ export default class Point {
     this._prevPoint = this._tripEventComponent;
     this._prevEditPoint = this._tripEditEventComponent;
     this._tripEventComponent = new TripEventView(point);
-    this._tripEditEventComponent = new TripEditEventView(point, this._cities, this._types);
+    this._tripEditEventComponent = new TripEditEventView(point, this._cities, this._types, this._destinations, this._offers);
 
     this._tripEventComponent.setRollupButtonClickHandler(this._handleEventOpen);
     this._tripEditEventComponent.setRollupButtonClickHandler(this._handleEventClose);
@@ -66,6 +67,7 @@ export default class Point {
   _handleEscKeyDown(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this._tripEditEventComponent.reset();
       this._replaceEditEventToEvent();
       document.removeEventListener('keydown', this._handleEscKeyDown);
     }
@@ -78,11 +80,13 @@ export default class Point {
   }
 
   _handleEventClose() {
+    this._tripEditEventComponent.reset();
     this._replaceEditEventToEvent();
     document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
-  _handleSubmitClick() {
+  _handleSubmitClick(point) {
+    this._changeData(point);
     this._replaceEditEventToEvent();
     document.removeEventListener('keydown', this._handleEscKeyDown);
   }
@@ -105,4 +109,3 @@ export default class Point {
     remove(this._tripEditEventComponent);
   }
 }
-

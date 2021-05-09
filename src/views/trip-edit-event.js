@@ -1,8 +1,8 @@
-import { getDate } from '../utils/common';
-import {typeIcons} from '../mock/data';
-import Abstract from './abstract';
+import { getDate, checkIsContains } from '../utils/common';
+import { typeIcons } from '../mock/data';
+import SmartView from './smart';
 
-const createTripEditEventTemplate = (cities, types, event = {}) => {
+const createTripEditEventTemplate = (event = {}, cities, types, offerDefaultList) => {
   const {
     basePrice = '',
     dateFrom =  '',
@@ -23,29 +23,41 @@ const createTripEditEventTemplate = (cities, types, event = {}) => {
       <input id="event-type-${type.toLowerCase()}-1" class="event__type-input visually-hidden"
         type="radio" name="event-type" value="${type.toLowerCase()}"
         ${activeType.toLowerCase() === type.toLowerCase() ? 'checked' : ''}>
-      <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
+      <label class="event__type-label  event__type-label--${type.toLowerCase()}"
+        for="event-type-${type.toLowerCase()}-1"
+        data-event-type="${type}">${type}</label>
     </div>`).join(' ');
   };
 
   const createOffersTemplate = () => {
-    return offers && offers.map((offer) =>
-      `<div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-1" type="checkbox"
-                   name="event-offer-${type}">
-                  <label class="event__offer-label" htmlFor="event-offer-${type}-1">
-                    <span class="event__offer-title">${offer.title}</span>
+    if(!offerDefaultList) {
+      return '';
+    }
+    return offerDefaultList.map((defaultOffer, index) => `<div class="event__offer-selector">
+                <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${index}" type="checkbox"
+                   name="event-offer-${type}-${index}" ${checkIsContains(defaultOffer.title, offers) ? 'checked' : ''} />
+                  <label class="event__offer-label"
+                    for="event-offer-${type}-${index}"
+                    data-event-offer="${defaultOffer.title}">
+                    <span class="event__offer-title">${defaultOffer.title}</span>
                     &plus;&euro;&nbsp;
-                    <span class="event__offer-${type}">${offer.price}</span>
+                    <span class="event__offer-${type}">${defaultOffer.price}</span>
                   </label>
               </div>`).join(' ');
   };
 
   const createPhotoTemplate = () => {
-    return pictures && pictures.map((url) => `<img class="event__photo" src="${url}" alt="Event photo">`).join(' ');
+    if(!pictures) {
+      return '';
+    }
+    return pictures.map((url) => `<img class="event__photo" src="${url}" alt="Event photo">`).join(' ');
   };
 
   const createCityOptions = () => {
-    return cities && cities.map((city) => `<option value="${city}"></option>`).join(' ');
+    if(!cities) {
+      return '';
+    }
+    return cities.map((city) => `<option value="${city}">${city}</option>`).join(' ');
   };
 
   return `<li class="trip-events__item">
@@ -130,19 +142,98 @@ const createTripEditEventTemplate = (cities, types, event = {}) => {
             </li>`;
 };
 
-export default class TripEditEvent extends Abstract {
-  constructor(event = {}, cities, types) {
+export default class TripEditEvent extends SmartView {
+  constructor(event = {}, cities, types, destinations, offerList) {
     super();
     this._cities = cities;
     this._types = types;
+    this._destinations = destinations;
     this._event = event;
-
+    this._data = TripEditEvent.parseEventToData(event);
+    this._offerObjectList = offerList;
+    this._offerDefaultList = offerList.filter((offer) => this._data.type === offer.type)[0].offers;
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
     this._submitClickHandler = this._submitClickHandler.bind(this);
+
+    this._typeClickHandler = this._typeClickHandler.bind(this);
+    this._destinationInputHandler = this._destinationInputHandler.bind(this);
+    this._offerClickHandler = this._offerClickHandler.bind(this);
+    this._setInnerHandlers();
   }
 
   getTemplate () {
-    return createTripEditEventTemplate(this._cities, this._types, this._event);
+    return createTripEditEventTemplate(this._data, this._cities, this._types, this._offerDefaultList);
+  }
+
+  restoreHandlers() {
+    this.setRollupButtonClickHandler(this._callback.rollupButtonClickHandler);
+    this._setInnerHandlers();
+    this.setSubmitClickHandler(this._callback.submitClickHandler);
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelector('.event__type-group')
+      .addEventListener('click', this._typeClickHandler);
+    this.getElement()
+      .querySelector('.event__input.event__input--destination')
+      .addEventListener('input', this._destinationInputHandler);
+    const offerElements = this.getElement()
+      .querySelectorAll('.event__offer-label');
+    for(const element of offerElements) {
+      element.addEventListener('click', this._offerClickHandler);
+    }
+  }
+
+  static parseEventToData(event) {
+    return Object.assign(
+      {},
+      event,
+      {});
+  }
+
+  static parseDataToEvent(data) {
+    data = Object.assign({}, data);
+    return data;
+  }
+
+  _typeClickHandler (evt) {
+    evt.preventDefault();
+    const newType = evt.target.dataset.eventType;
+    const newOffers = this._offerObjectList.filter((item) => item.type === newType)[0].offers;
+    this.updateData({
+      type: newType,
+      offers: newOffers,
+    });
+  }
+
+  _destinationInputHandler(evt) {
+    evt.preventDefault();
+    const newDestinationName = evt.target.value;
+    const newDestination = this._destinations.filter((item) => item.name === newDestinationName)[0];
+    this.updateData(
+      {
+        destination: newDestination,
+      });
+  }
+
+  _createNewOffers(name) {
+    const offers = [...this._data.offers];
+    if(checkIsContains(name, offers)) {
+      return offers.filter((item) => item.title !== name);
+    } else {
+      const result = this._offerDefaultList.find((offer) => offer.title === name);
+      offers.push(result);
+      return offers;
+    }
+  }
+
+  _offerClickHandler (evt) {
+    const activeOfferName = evt.currentTarget.dataset.eventOffer;
+    const  newOffers  = this._createNewOffers(activeOfferName);
+    this.updateData({
+      offers: newOffers,
+    }, true);
   }
 
   _rollupButtonClickHandler (evt) {
@@ -152,16 +243,24 @@ export default class TripEditEvent extends Abstract {
 
   setRollupButtonClickHandler (callback) {
     this._callback.rollupButtonClickHandler = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
+    this.getElement()
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this._rollupButtonClickHandler);
   }
 
   _submitClickHandler (evt) {
     evt.preventDefault();
-    this._callback.submitClickHandler();
+    this._callback.submitClickHandler(TripEditEvent.parseDataToEvent(this._data));
   }
 
   setSubmitClickHandler (callback) {
     this._callback.submitClickHandler = callback;
-    this.getElement().querySelector('.event--edit').addEventListener('submit', this._submitClickHandler);
+    this.getElement()
+      .querySelector('.event--edit')
+      .addEventListener('submit', this._submitClickHandler);
+  }
+
+  reset() {
+    this.updateData(TripEditEvent.parseDataToEvent(this._event));
   }
 }

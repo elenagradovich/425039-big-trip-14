@@ -26,9 +26,9 @@ export const getDate = (date, type) => {
   return dayjs(date).format(dateFormat);
 };
 
-export const getOffers = (type) => {
-  const offers = offerList.filter((item) => item.type === type);
-  return offers[0].offers;
+export const getActiveOffers = (type) => {
+  const arr = offerList.filter((item) => item.type === type);
+  return arr[0].offers.slice(0, 1);
 };
 
 export const getPointCities = (eventPoints) => {
@@ -81,3 +81,9 @@ export const sortPointsTime = (pointPrev, pointNext) => {
 };
 
 export const sortPointsPrice = (pointPrev, pointNext) => pointPrev.basePrice - pointNext.basePrice;
+
+export const checkIsContains = (name, items) =>  {
+  return items && items.some((item) => {
+    return item.title === name;
+  });
+};

@@ -4,14 +4,13 @@ import Abstract from './abstract';
 
 const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
   const { name } = destination;
-
   const checkIsFavoriteClass = (isFavorite) => {
     return isFavorite
       ? 'event__favorite-btn event__favorite-btn--active'
       : 'event__favorite-btn';
   };
 
-  const createOffersTemplate = offers.map((offer) => `<li className="event__offer">
+  const createOffersTemplate = offers && offers.map((offer) => `<li className="event__offer">
         <span className="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span className="event__offer-price">${offer.price}</span>
