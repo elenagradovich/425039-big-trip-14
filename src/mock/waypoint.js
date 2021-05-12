@@ -13,11 +13,7 @@ export const generateImages = () => {
     `http://picsum.photos/248/152?r=${getRandomValue(MAX_PHOTO_INDEX)}`);
 };
 
-const generateDate = (date) => {
-  return date
-    ? dayjs(date).add(getRandomValue(1000), 'minutes').toDate()
-    : dayjs().add(getRandomValue(3000), 'hours').toDate();
-};
+const generateDate = () => dayjs().add(getRandomValue(500, 1), 'minute');
 
 const generateType =  () => {
   return types[getRandomValue(types.length-1)];
@@ -26,11 +22,13 @@ const generateType =  () => {
 export const generateWaypoint = () => {
   const type = generateType();
   const offers =  getActiveOffers(type);
+  const dateFrom = generateDate().toDate();
+  const dateTo = dayjs(dateFrom).add(getRandomValue(500, 1), 'minute').toDate();
   return {
     id: nanoid(),
     basePrice: getRandomValue(100),
-    dateFrom: generateDate(),
-    dateTo: generateDate(),
+    dateFrom,
+    dateTo,
     destination: {
       description: descriptions[getRandomValue(descriptions.length - 1)],
       name: cities[getRandomValue(cities.length - 1)],

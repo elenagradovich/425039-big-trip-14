@@ -1,6 +1,7 @@
-import {getDate, getPeriod} from '../utils/common';
+import { getDateInFormat, getPeriod } from '../utils/common';
 import {typeIcons} from '../mock/data';
 import Abstract from './abstract';
+import { DateFormat } from '../const';
 
 const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
   const { name } = destination;
@@ -18,18 +19,20 @@ const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offe
 
   return `<li class="trip-events__item">
             <div class="event">
-              <time class="event__date" datetime="${getDate(dateFrom)}">${getDate(dateFrom, 'date')}</time>
+              <time class="event__date" datetime="${getDateInFormat(dateFrom, DateFormat.DEFAULT)}">${getDateInFormat(dateFrom, DateFormat.DATE)}</time>
               <div class="event__type">
                 <img class="event__type-icon" width="42" height="42" src="${typeIcons.get(type.toLowerCase())}" alt="Event type icon">
               </div>
               <h3 class="event__title">${type} ${name}</h3>
               <div class="event__schedule">
                 <p class="event__time">
-                  <time class="event__start-time" datetime="${getDate(dateFrom, 'date_full')}">
-                     ${getDate(dateFrom, 'time')}</time>
+                  <time class="event__start-time" datetime="${getDateInFormat(dateFrom, DateFormat.DATE_FULL)}">
+                     ${getDateInFormat(dateFrom, DateFormat.TIME)}
+                     ${getDateInFormat(dateFrom, DateFormat.DATE_TIME)}
+                     </time>
                   &mdash;
-                  <time class="event__end-time" datetime="${getDate(dateTo, 'date_full')}">
-                     ${getDate(dateTo, 'time')}</time>
+                  <time class="event__end-time" datetime="${getDateInFormat(dateTo, DateFormat.DATE_FULL)}">
+                     ${getDateInFormat(dateTo, DateFormat.DATE_TIME)}</time>
                 </p>
                 <p class="event__duration">${getPeriod(dateFrom,dateTo)}</p>
               </div>

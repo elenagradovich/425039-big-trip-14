@@ -1,6 +1,9 @@
-import { getDate, checkIsContains } from '../utils/common';
+import { getDateInFormat, checkIsContains, getDiffDates } from '../utils/common';
 import { typeIcons } from '../mock/data';
 import SmartView from './smart';
+import { DateFormat } from '../const';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createTripEditEventTemplate = (event = {}, cities, types, offerDefaultList) => {
   const {
@@ -99,10 +102,10 @@ const createTripEditEventTemplate = (event = {}, cities, types, offerDefaultList
 
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom && getDate(dateFrom)}">
-
+                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom} ${dateFrom && getDateInFormat(dateFrom, DateFormat.DEFAULT)}">
+                    <span>&#8212;</span>
                     <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo && getDate(dateTo)}">
+                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo} ${dateTo && getDateInFormat(dateTo, DateFormat.DEFAULT)}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">
@@ -150,6 +153,8 @@ export default class TripEditEvent extends SmartView {
     this._destinations = destinations;
     this._event = event;
     this._data = TripEditEvent.parseEventToData(event);
+    this._datePickerStart = null;
+    this._datePickerEnd = null;
     this._offerObjectList = offerList;
     this._offerDefaultList = offerList.filter((offer) => this._data.type === offer.type)[0].offers;
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
@@ -159,6 +164,11 @@ export default class TripEditEvent extends SmartView {
     this._destinationInputHandler = this._destinationInputHandler.bind(this);
     this._offerClickHandler = this._offerClickHandler.bind(this);
     this._setInnerHandlers();
+
+    this._dateStartChangeHandler = this._dateStartChangeHandler.bind(this);
+    this._dateEndChangeHandler = this._dateEndChangeHandler.bind(this);
+    this._setDatepickerStart();
+    this._setDatepickerEnd();
   }
 
   getTemplate () {
@@ -169,6 +179,42 @@ export default class TripEditEvent extends SmartView {
     this.setRollupButtonClickHandler(this._callback.rollupButtonClickHandler);
     this._setInnerHandlers();
     this.setSubmitClickHandler(this._callback.submitClickHandler);
+    this._setDatepickerStart();
+    this._setDatepickerEnd();
+  }
+
+  _setDatepickerStart() {
+    if (this._datePickerStart) {
+      this._datePickerStart.destroy();
+      this._datePickerStart = null;
+    }
+    this._datePickerStart = flatpickr(
+      this.getElement().querySelector('#event-start-time-1'),
+      {
+        time_24hr: true,
+        enableTime: true,
+        dateFormat: 'd/m/Y h:i',
+        defaultDate: this._data.dateFrom,
+        onChange: this._dateStartChangeHandler,
+      },
+    );
+  }
+
+  _setDatepickerEnd() {
+    if (this._datePickerEnd) {
+      this._datePickerEnd.destroy();
+      this._datePickerEnd = null;
+    }
+    this._datePickerEnd = flatpickr(
+      this.getElement().querySelector('#event-end-time-1'),
+      {
+        time_24hr: true,
+        enableTime: true,
+        dateFormat: 'd/m/Y h:i',
+        defaultDate: this._data.dateTo,
+        onChange: this._dateEndChangeHandler,
+      },
+    );
   }
 
   _setInnerHandlers() {
@@ -180,8 +226,24 @@ export default class TripEditEvent extends SmartView {
       .addEventListener('input', this._destinationInputHandler);
     const offerElements = this.getElement()
       .querySelectorAll('.event__offer-label');
-    for(const element of offerElements) {
+    for (const element of offerElements) {
       element.addEventListener('click', this._offerClickHandler);
+    }
+  }
+
+  _dateStartChangeHandler([userDate]) {
+    if(getDiffDates(userDate, this._data.dateTo, 'second') > 0) {
+      this.updateData({
+        dateFrom: userDate,
+      }, true);
+    }
+  }
+
+  _dateEndChangeHandler([userDate]) {
+    if(getDiffDates(this._data.dateFrom, userDate, 'second') > 0) {
+      this.updateData({
+        dateTo: userDate,
+      }, true);
     }
   }
 
