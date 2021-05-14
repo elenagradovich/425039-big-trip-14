@@ -1,5 +1,5 @@
 import PointPresenter from './point';
-import TripEventListView from '../views/trip-event-list';
+import TripPointsView from '../views/trip-points';
 import { render } from '../utils/render';
 import { updateItem, sortPointsPrice, sortPointsTime } from '../utils/common';
 import { RenderPosition, SortTypes } from '../const';
@@ -22,7 +22,7 @@ export default class Points {
   init(points, cities, types, destinations, offers) {
     this._currentSortType = SortTypes.DAY;
     this._sourcedPoints = points.slice();
-    this._pointsComponent = new TripEventListView();
+    this._pointsComponent = new TripPointsView();
     this._points = points;
     this._cities = cities;
     this._destinations = destinations;

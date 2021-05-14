@@ -1,17 +1,17 @@
 import Abstract from './abstract';
 
-const createTripEventListTemplate = () => {
+const createTripPointsTemplate = () => {
   return `<ul class="trip-events__list">
 
           </ul>`;
 };
 
-export default class TripEventList extends Abstract{
+export default class TripPoints extends Abstract{
   constructor() {
     super();
   }
 
   getTemplate () {
-    return createTripEventListTemplate();
+    return createTripPointsTemplate();
   }
 }

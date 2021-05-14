@@ -3,7 +3,7 @@ import {typeIcons} from '../mock/data';
 import Abstract from './abstract';
 import { DateFormat } from '../const';
 
-const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
+const createTripPointTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
   const { name } = destination;
   const checkIsFavoriteClass = (isFavorite) => {
     return isFavorite
@@ -27,7 +27,6 @@ const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offe
               <div class="event__schedule">
                 <p class="event__time">
                   <time class="event__start-time" datetime="${getDateInFormat(dateFrom, DateFormat.DATE_FULL)}">
-                     ${getDateInFormat(dateFrom, DateFormat.TIME)}
                      ${getDateInFormat(dateFrom, DateFormat.DATE_TIME)}
                      </time>
                   &mdash;
@@ -58,16 +57,16 @@ const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offe
           </li>`;
 };
 
-export default class TripEvent extends Abstract{
-  constructor(event) {
+export default class TripPoint extends Abstract{
+  constructor(point) {
     super();
-    this._event = event;
+    this._point = point;
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
     this._favoriteButtonClickHandler = this._favoriteButtonClickHandler.bind(this);
   }
 
   getTemplate () {
-    return createTripEventTemplate(this._event);
+    return createTripPointTemplate(this._point);
   }
 
   _rollupButtonClickHandler (evt) {
@@ -77,7 +76,9 @@ export default class TripEvent extends Abstract{
 
   setRollupButtonClickHandler (callback) {
     this._callback.rollupButtonClickHandler = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
+    this.getElement()
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this._rollupButtonClickHandler);
   }
 
   _favoriteButtonClickHandler (evt) {
@@ -87,6 +88,8 @@ export default class TripEvent extends Abstract{
 
   setFavouriteButtonClickHandler (callback) {
     this._callback.favoriteButtonClickHandler = callback;
-    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteButtonClickHandler);
+    this.getElement()
+      .querySelector('.event__favorite-btn')
+      .addEventListener('click', this._favoriteButtonClickHandler);
   }
 }

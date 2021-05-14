@@ -1,6 +1,9 @@
 import dayjs from 'dayjs';
 import { offerList } from '../mock/data';
 
+const MIN_PERIOD_IN_MINUTES = 1;
+const MINUTES_IN_HOUR = 60;
+const MINUTES_IN_DAY = 24 * 60;
 
 export const getRandomValue = (maxLength = 1, minLength = 0) => {
   const lower = Math.ceil(Math.min(minLength, maxLength));
@@ -58,10 +61,6 @@ export const updateItem = (items, update) => {
 export const getDiffDates = (start, end, unitMeasure) => dayjs(end).diff(dayjs(start), unitMeasure);
 
 const getFormatTime = (period) => {
-  const MIN_PERIOD_IN_MINUTES = 1;
-  const MINUTES_IN_HOUR = 60;
-  const MINUTES_IN_DAY = 24 * 60;
-
   if(period >= MIN_PERIOD_IN_MINUTES && period < MINUTES_IN_HOUR) {
     return `${period}M`;
   }
@@ -92,9 +91,3 @@ export const sortPointsTime = (pointPrev, pointNext) => {
 };
 
 export const sortPointsPrice = (pointPrev, pointNext) => pointPrev.basePrice - pointNext.basePrice;
-
-export const checkIsContains = (name, items) =>  {
-  return items && items.some((item) => {
-    return item.title === name;
-  });
-};

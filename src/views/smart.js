@@ -13,11 +13,7 @@ export default class Smart extends Abstract {
       return;
     }
 
-    this._data = Object.assign(
-      {},
-      this._data,
-      update,
-    );
+    this._state = {...this._state, ...update};
 
     if (justDataUpdating) {
       return;
