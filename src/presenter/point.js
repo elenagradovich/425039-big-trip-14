@@ -1,89 +1,93 @@
-import TripEventView from '../views/trip-event';
-import TripEditEventView from '../views/trip-edit-event';
+import TripPointView from '../views/trip-point';
+import TripEditPointView from '../views/trip-edit-point';
 import { remove, render, replace } from '../utils/render';
 import { RenderPosition, Mode } from '../const';
 
 export default class Point {
-  constructor(container, cities, types, changeData, changeMode) {
+  constructor(container, cities, types, destinations, offers, changeData, changeMode) {
     this._container = container;
-    this._tripEventComponent = null;
-    this._tripEditEventComponent = null;
+    this._tripPointComponent = null;
+    this._tripEditPointComponent = null;
     this._cities = cities;
     this._types = types;
+    this._destinations = destinations;
+    this._offers = offers;
     this._changeData = changeData;
-
     this._changeMode = changeMode;
     this._mode = Mode.DEFAULT;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
-    this._handleEventOpen = this._handleEventOpen.bind(this);
-    this._handleEventClose = this._handleEventClose.bind(this);
+    this._handlePointOpen = this._handlePointOpen.bind(this);
+    this._handlePointClose = this._handlePointClose.bind(this);
     this._handleSubmitClick = this._handleSubmitClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
   init(point) {
     this._point = point;
-    this._prevPoint = this._tripEventComponent;
-    this._prevEditPoint = this._tripEditEventComponent;
-    this._tripEventComponent = new TripEventView(point);
-    this._tripEditEventComponent = new TripEditEventView(point, this._cities, this._types);
+    this._prevPoint = this._tripPointComponent;
+    this._prevEditPoint = this._tripEditPointComponent;
+    this._tripPointComponent = new TripPointView(point);
+    this._tripEditPointComponent = new TripEditPointView(point, this._cities, this._types, this._destinations, this._offers);
 
-    this._tripEventComponent.setRollupButtonClickHandler(this._handleEventOpen);
-    this._tripEditEventComponent.setRollupButtonClickHandler(this._handleEventClose);
-    this._tripEditEventComponent.setSubmitClickHandler(this._handleSubmitClick);
+    this._tripPointComponent.setRollupButtonClickHandler(this._handlePointOpen);
+    this._tripEditPointComponent.setRollupButtonClickHandler(this._handlePointClose);
+    this._tripEditPointComponent.setSubmitClickHandler(this._handleSubmitClick);
 
-    this._tripEventComponent.setFavouriteButtonClickHandler(this._handleFavoriteClick);
+    this._tripPointComponent.setFavouriteButtonClickHandler(this._handleFavoriteClick);
 
     if (this._prevPoint === null && this._prevEditPoint === null) {
-      render(this._container, this._tripEventComponent, RenderPosition.BEFOREEND);
+      render(this._container, this._tripPointComponent, RenderPosition.BEFOREEND);
       return;
     }
 
     if (this._container.getElement().contains(this._prevPoint.getElement())) {
-      replace(this._tripEventComponent, this._prevPoint);
+      replace(this._tripPointComponent, this._prevPoint);
     }
 
     if (this._container.getElement().contains(this._prevEditPoint.getElement())) {
-      replace(this._tripEditEventComponent, this._prevEditPoint);
+      replace(this._tripEditPointComponent, this._prevEditPoint);
     }
 
     remove(this._prevPoint);
     remove(this._prevEditPoint);
   }
 
-  _replaceEventToEditEvent() {
-    replace(this._tripEditEventComponent, this._tripEventComponent);
+  _replacePointToEditPoint() {
+    replace(this._tripEditPointComponent, this._tripPointComponent);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
-  _replaceEditEventToEvent() {
-    replace(this._tripEventComponent, this._tripEditEventComponent);
+  _replaceEditPointToPoint() {
+    replace(this._tripPointComponent, this._tripEditPointComponent);
     this._mode = Mode.DEFAULT;
   }
 
   _handleEscKeyDown(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      this._replaceEditEventToEvent();
+      this._tripEditPointComponent.reset();
+      this._replaceEditPointToPoint();
       document.removeEventListener('keydown', this._handleEscKeyDown);
     }
   }
 
-  _handleEventOpen() {
-    this._replaceEventToEditEvent();
+  _handlePointOpen() {
+    this._replacePointToEditPoint();
     document.addEventListener('keydown', this._handleEscKeyDown);
 
   }
 
-  _handleEventClose() {
-    this._replaceEditEventToEvent();
+  _handlePointClose() {
+    this._tripEditPointComponent.reset();
+    this._replaceEditPointToPoint();
     document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
-  _handleSubmitClick() {
-    this._replaceEditEventToEvent();
+  _handleSubmitClick(point) {
+    this._changeData(point);
+    this._replaceEditPointToPoint();
     document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
@@ -96,13 +100,12 @@ export default class Point {
 
   resetView() {
     if(this._mode !== Mode.DEFAULT) {
-      this._replaceEditEventToEvent();
+      this._replaceEditPointToPoint();
     }
   }
 
   destroy() {
-    remove(this._tripEventComponent);
-    remove(this._tripEditEventComponent);
+    remove(this._tripPointComponent);
+    remove(this._tripEditPointComponent);
   }
 }
-

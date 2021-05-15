@@ -19,10 +19,12 @@ export default class Main {
     this._sortPublisher = new SortPublisher();
   }
 
-  init (wayPoints, cities, types, activeFilterParam, activeNavParam) {
+  init (wayPoints, cities, types, destinations, offers, activeFilterParam, activeNavParam) {
     this._points = wayPoints;
     this._cities = cities;
     this._types = types;
+    this._destinations = destinations;
+    this._offers = offers;
     this._activeFilterParam = activeFilterParam;
     this._activeNavParam = activeNavParam;
 
@@ -43,7 +45,7 @@ export default class Main {
 
   _renderPoints () {
     const pointsPresenter = new PointPresenter(this._tripContainer, this._sortPublisher);
-    pointsPresenter.init(this._points, this._cities, this._types );
+    pointsPresenter.init(this._points, this._cities, this._types, this._destinations, this._offers);
   }
 
   _renderSort () {

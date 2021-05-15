@@ -1,5 +1,5 @@
 import PointPresenter from './point';
-import TripEventListView from '../views/trip-event-list';
+import TripPointsView from '../views/trip-points';
 import { render } from '../utils/render';
 import { updateItem, sortPointsPrice, sortPointsTime } from '../utils/common';
 import { RenderPosition, SortTypes } from '../const';
@@ -19,12 +19,14 @@ export default class Points {
     this._piblisher.subscribe((type) => this._handleSortTypeChange(type));
   }
 
-  init(points, cities, types) {
+  init(points, cities, types, destinations, offers) {
     this._currentSortType = SortTypes.DAY;
     this._sourcedPoints = points.slice();
-    this._pointsComponent = new TripEventListView();
+    this._pointsComponent = new TripPointsView();
     this._points = points;
     this._cities = cities;
+    this._destinations = destinations;
+    this._offers = offers;
     this._types = types;
     render(this._container, this._pointsComponent, RenderPosition.BEFOREEND);
     this._renderPoints();
@@ -37,11 +39,14 @@ export default class Points {
   }
 
   _handleModeChange() {
-    Object.values(this._pointPresenterContainer).forEach((presenter) => presenter.resetView());
+    Object.values(this._pointPresenterContainer).forEach((presenter) => {
+      presenter.resetView();
+    });
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointsComponent, this._cities, this._types,
+    const pointPresenter = new PointPresenter(
+      this._pointsComponent, this._cities, this._types, this._destinations, this._offers,
       this._handlePointChange, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenterContainer[point.id] = pointPresenter;

@@ -1,6 +1,10 @@
 import dayjs from 'dayjs';
 import { offerList } from '../mock/data';
 
+const MIN_PERIOD_IN_MINUTES = 1;
+const MINUTES_IN_HOUR = 60;
+const MINUTES_IN_DAY = 24 * 60;
+
 export const getRandomValue = (maxLength = 1, minLength = 0) => {
   const lower = Math.ceil(Math.min(minLength, maxLength));
   const upper = Math.floor(Math.max(minLength, maxLength));
@@ -8,27 +12,9 @@ export const getRandomValue = (maxLength = 1, minLength = 0) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-export const getDate = (date, type) => {
-  let dateFormat;
-  switch (type) {
-    case 'time':
-      dateFormat = 'MM:HH';
-      break;
-    case 'date':
-      dateFormat = 'MMM DD';
-      break;
-    case 'date_full':
-      dateFormat = 'YYYY-MM-DD';
-      break;
-    default:
-      dateFormat = 'DD/MM/YY HH:mm';
-  }
-  return dayjs(date).format(dateFormat);
-};
-
-export const getOffers = (type) => {
-  const offers = offerList.filter((item) => item.type === type);
-  return offers[0].offers;
+export const getActiveOffers = (type) => {
+  const arr = offerList.filter((item) => item.type === type);
+  return arr[0].offers.slice(0, 1);
 };
 
 export const getPointCities = (eventPoints) => {
@@ -52,8 +38,6 @@ export const getEventPriceSum = (eventPoints) => {
   }, 0);
 };
 
-export const getPeriod = (dateFrom, dateTo) => `${getDate(dateFrom, 'date_full')} - ${getDate(dateTo,'date_full')}`;
-
 export const createElement = (template) => {
   const newElement = document.createElement('div');
   newElement.innerHTML = template;
@@ -74,9 +58,35 @@ export const updateItem = (items, update) => {
   ];
 };
 
+export const getDiffDates = (start, end, unitMeasure) => dayjs(end).diff(dayjs(start), unitMeasure);
+
+const getFormatTime = (period) => {
+  if(period >= MIN_PERIOD_IN_MINUTES && period < MINUTES_IN_HOUR) {
+    return `${period}M`;
+  }
+  if(period >= MINUTES_IN_HOUR && period < MINUTES_IN_DAY) {
+    const hours = Math.trunc(period / MINUTES_IN_HOUR);
+    const minutes = period - hours * MINUTES_IN_HOUR;
+    return `${hours}H ${minutes ? minutes : '00'}M`;
+  }
+  if(period >= MINUTES_IN_DAY) {
+    const days = Math.trunc(period/MINUTES_IN_DAY);
+    const hours = Math.trunc((period - days * MINUTES_IN_DAY) / MINUTES_IN_HOUR);
+    const minutes = (period - days * MINUTES_IN_DAY - hours * MINUTES_IN_HOUR);
+    return `${days}D ${hours ? hours : '00'}H ${minutes ? minutes : '00'}M`;
+  }
+};
+
+export const getPeriod = (dateFrom, dateTo) => {
+  const periodInMinutes = getDiffDates(dateFrom, dateTo, 'minutes');
+  return getFormatTime(periodInMinutes);
+};
+
+export const getDateInFormat = (date, type) => dayjs(date).format(type);
+
 export const sortPointsTime = (pointPrev, pointNext) => {
-  const periodPrev = dayjs(pointPrev.dateTo).diff(dayjs(pointPrev.dateFrom), 'second');
-  const periodNext = dayjs(pointNext.dateTo).diff(dayjs(pointNext.dateFrom), 'second');
+  const periodPrev = getDiffDates(pointPrev.dateFrom, pointPrev.dateTo,'second');
+  const periodNext = getDiffDates(pointNext.dateFrom, pointNext.dateTo,'second');
   return periodNext - periodPrev;
 };
 

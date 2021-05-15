@@ -1,17 +1,17 @@
-import {getDate, getPeriod} from '../utils/common';
+import { getDateInFormat, getPeriod } from '../utils/common';
 import {typeIcons} from '../mock/data';
 import Abstract from './abstract';
+import { DateFormat } from '../const';
 
-const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
+const createTripPointTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
   const { name } = destination;
-
   const checkIsFavoriteClass = (isFavorite) => {
     return isFavorite
       ? 'event__favorite-btn event__favorite-btn--active'
       : 'event__favorite-btn';
   };
 
-  const createOffersTemplate = offers.map((offer) => `<li className="event__offer">
+  const createOffersTemplate = offers && offers.map((offer) => `<li className="event__offer">
         <span className="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span className="event__offer-price">${offer.price}</span>
@@ -19,18 +19,19 @@ const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offe
 
   return `<li class="trip-events__item">
             <div class="event">
-              <time class="event__date" datetime="${getDate(dateFrom)}">${getDate(dateFrom, 'date')}</time>
+              <time class="event__date" datetime="${getDateInFormat(dateFrom, DateFormat.DEFAULT)}">${getDateInFormat(dateFrom, DateFormat.DATE)}</time>
               <div class="event__type">
                 <img class="event__type-icon" width="42" height="42" src="${typeIcons.get(type.toLowerCase())}" alt="Event type icon">
               </div>
               <h3 class="event__title">${type} ${name}</h3>
               <div class="event__schedule">
                 <p class="event__time">
-                  <time class="event__start-time" datetime="${getDate(dateFrom, 'date_full')}">
-                     ${getDate(dateFrom, 'time')}</time>
+                  <time class="event__start-time" datetime="${getDateInFormat(dateFrom, DateFormat.DATE_FULL)}">
+                     ${getDateInFormat(dateFrom, DateFormat.DATE_TIME)}
+                     </time>
                   &mdash;
-                  <time class="event__end-time" datetime="${getDate(dateTo, 'date_full')}">
-                     ${getDate(dateTo, 'time')}</time>
+                  <time class="event__end-time" datetime="${getDateInFormat(dateTo, DateFormat.DATE_FULL)}">
+                     ${getDateInFormat(dateTo, DateFormat.DATE_TIME)}</time>
                 </p>
                 <p class="event__duration">${getPeriod(dateFrom,dateTo)}</p>
               </div>
@@ -56,16 +57,16 @@ const createTripEventTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offe
           </li>`;
 };
 
-export default class TripEvent extends Abstract{
-  constructor(event) {
+export default class TripPoint extends Abstract{
+  constructor(point) {
     super();
-    this._event = event;
+    this._point = point;
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
     this._favoriteButtonClickHandler = this._favoriteButtonClickHandler.bind(this);
   }
 
   getTemplate () {
-    return createTripEventTemplate(this._event);
+    return createTripPointTemplate(this._point);
   }
 
   _rollupButtonClickHandler (evt) {
@@ -75,7 +76,9 @@ export default class TripEvent extends Abstract{
 
   setRollupButtonClickHandler (callback) {
     this._callback.rollupButtonClickHandler = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._rollupButtonClickHandler);
+    this.getElement()
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this._rollupButtonClickHandler);
   }
 
   _favoriteButtonClickHandler (evt) {
@@ -85,6 +88,8 @@ export default class TripEvent extends Abstract{
 
   setFavouriteButtonClickHandler (callback) {
     this._callback.favoriteButtonClickHandler = callback;
-    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteButtonClickHandler);
+    this.getElement()
+      .querySelector('.event__favorite-btn')
+      .addEventListener('click', this._favoriteButtonClickHandler);
   }
 }

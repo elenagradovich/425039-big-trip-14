@@ -1,4 +1,4 @@
-import { cities, types, wayPoints, activeFilterParam, activeNavParam } from './mock/data';
+import { cities, types, wayPoints, activeFilterParam, activeNavParam, destinations, offerList } from './mock/data';
 
 const tripEventsContainer = document.querySelector('.trip-events');
 const tripMainContainer = document.querySelector('.trip-main');
@@ -7,5 +7,5 @@ const tripFiltersContainer = tripMainContainer.querySelector('.trip-controls__fi
 
 import MainPresenter from './presenter/main';
 const tripPresenter = new MainPresenter(tripEventsContainer, tripNavigationContainer, tripFiltersContainer, tripMainContainer);
-tripPresenter.init(wayPoints, cities, types, activeFilterParam, activeNavParam);
+tripPresenter.init(wayPoints, cities, types, destinations, offerList, activeFilterParam, activeNavParam);
 

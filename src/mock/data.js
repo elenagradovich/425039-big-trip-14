@@ -1,11 +1,11 @@
 import { FilterParameters, NavParameters } from '../const';
 import { getRandomValue } from '../utils/common';
-import { generateWaypoint } from './waypoint';
+import { generateWaypoint, generateImages } from './waypoint';
 
 export const types = ['check-in', 'sightseeing', 'restaurant',
   'taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight'];
 
-export const cities = ['Madrid', 'London', 'Paris', 'Tel Aviv', 'Rome', 'Chamonix'];
+export const cities = ['Madrid', 'London', 'Paris', 'Rome'];
 
 export const offerList = [
   {
@@ -71,9 +71,10 @@ export const offerList = [
       {
         'title': 'Upgrade to a business class',
         'price': 120,
-      }, {
+      },
+      {
         'title': 'Choose the meal',
-        'price': 60,
+        'price': 40,
       },
     ],
   },
@@ -81,10 +82,11 @@ export const offerList = [
     'type': 'ship',
     'offers': [
       {
-        'title': 'Upgrade to a business class',
+        'title': 'Upgrade',
         'price': 90,
-      }, {
-        'title': 'Choose the meal',
+      },
+      {
+        'title': 'the meal',
         'price': 80,
       },
     ],
@@ -105,6 +107,18 @@ export const offerList = [
         'title': 'Choose car',
         'price': 120,
       },
+      {
+        'title': 'porta ligula',
+        'price': 20,
+      },
+      {
+        'title': 'condimentum sed',
+        'price': 10,
+      },
+      {
+        'title': 'nibh vitae',
+        'price': 5,
+      },
     ],
   },
   {
@@ -113,9 +127,14 @@ export const offerList = [
       {
         'title': 'Upgrade to a business class',
         'price': 120,
-      }, {
+      },
+      {
         'title': 'Choose seats',
         'price': 60,
+      },
+      {
+        'title': 'Nullam nunc',
+        'price': 90,
       },
     ],
   },
@@ -141,6 +160,14 @@ export const typeIcons = new Map(Object.entries({
   'transport': 'img/icons/transport.png',
   'drive': 'img/icons/transport.png',
 }));
+
+export const destinations = cities.map((city) => {
+  return {
+    description: `${city}, ${descriptions[getRandomValue(descriptions.length - 1)]}.`,
+    name: `${city}`,
+    pictures: generateImages(),
+  };
+});
 
 //Navigation
 export const activeNavParam = NavParameters[getRandomValue(NavParameters.length-1)];
