@@ -129,7 +129,7 @@ const createTripEditPointTemplate = (point, cities, types, offersByType) => {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price"
+                    <input class="event__input  event__input--price" id="event-price-1" name="event-price" type="number"
                       value="${basePrice}">
                   </div>
 
@@ -288,11 +288,11 @@ export default class TripEditPoint extends SmartView {
     evt.preventDefault();
     let newPrice = evt.target.value;
     if(newPrice.includes(',')) {
-      newPrice = Math.round(newPrice.replace(/,/, '.'));
+      newPrice = newPrice.replace(/,/, '.');
     }
 
     this.updateData({
-      basePrice: newPrice,
+      basePrice:  Math.round(newPrice),
     }, true);
   }
 

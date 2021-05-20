@@ -78,7 +78,6 @@ export default class Point {
   _handlePointOpen() {
     this._replacePointToEditPoint();
     document.addEventListener('keydown', this._handleEscKeyDown);
-
   }
 
   _handlePointClose() {

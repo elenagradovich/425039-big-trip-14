@@ -17,9 +17,10 @@ export default class Points {
     this._pointsModel = pointsModel;
     this._noPoinsComponent = new NoEventsComponentView();
 
-    this._handleViewAction = this._handleViewAction.bind(this);
+
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
 
     this._pointsModel.subscribe(this._handleModelEvent);
     this._filterModel.subscribe(this._handleModelEvent);
@@ -142,6 +143,7 @@ export default class Points {
   createNewPoint() {
     this._filterModel.setActiveFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING, false);
     this._sortModel.setActiveSortType(UpdateType.MAJOR, SortTypes.DAY, false);
+
     this._pointNewPresenter.init();
   }
 }

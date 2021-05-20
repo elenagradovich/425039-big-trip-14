@@ -65,7 +65,7 @@ const getFormatTime = (period) => {
 
 export const getPeriod = (dateFrom, dateTo) => {
   const periodInMinutes = getDiffDates(dateFrom, dateTo, 'minutes');
-  return getFormatTime(periodInMinutes);
+  return periodInMinutes ? getFormatTime(periodInMinutes) : '';
 };
 
 export const getDateInFormat = (date, type) => dayjs(date).format(type);
@@ -78,4 +78,4 @@ export const sortPointsByTime = (pointPrev, pointNext) => {
 
 export const sortPointsByPrice = (pointPrev, pointNext) => pointNext.basePrice - pointPrev.basePrice;
 
-export const sortPointsByDay = (pointPrev, pointNext) => getDiffDates(pointNext.dateFrom,pointPrev.dateFrom, 'second');
+export const sortPointsByDay = (pointPrev, pointNext) => getDiffDates(pointPrev.dateFrom, pointNext.dateFrom,'second');

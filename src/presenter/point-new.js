@@ -26,22 +26,17 @@ export default class PointNew {
     if (this._newPointComponent !== null) {
       return;
     }
+
     this._changeMode();
     this._mode = Mode.EDITING;
 
     this._newPointComponent = new TripEditPointView(this._cities, this._types, this._destinations, this._offers, this._point);
     render(this._container, this._newPointComponent , RenderPosition.AFTERBEGIN);
 
+    document.addEventListener('keydown', this._handleEscKeyDown);
     this._newPointComponent.setSubmitClickHandler(this._handleSubmitClick);
     this._newPointComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._newPointComponent.setRollupButtonClickHandler(this._handleDeleteClick);
-  }
-
-  _handleEscKeyDown(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      this.destroy();
-    }
   }
 
   _handlePointClose() {
@@ -65,6 +60,13 @@ export default class PointNew {
 
   resetView() {
     if(this._mode !== Mode.DEFAULT) {
+      this.destroy();
+    }
+  }
+
+  _handleEscKeyDown(evt) {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
       this.destroy();
     }
   }
