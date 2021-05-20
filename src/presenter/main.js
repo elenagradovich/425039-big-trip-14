@@ -1,76 +1,44 @@
-import NoEventsComponentView from '../views/trip-no-events';
-import PointPresenter from './points';
-import FilterPresenter from '../presenter/filters';
-import SortPresenter from '../presenter/sort';
-import NavigationPresenter from '../presenter/navigation';
-import InfoPresenter from '../presenter/info';
-import SortPublisher from '../utils/sort-publisher';
-
-import { RenderPosition } from '../const';
-import { render } from '../utils/render';
-
+import PointsPresenter from './points';
+import FilterPresenter from './filters';
+import SortPresenter from './sort';
+import NavigationPresenter from './navigation';
+import InfoPresenter from './info';
 
 export default class Main {
-  constructor(tripContainer, navigationContainer, filtersContainer, tripMainContainer) {
+  constructor(tripContainer, navigationContainer, filtersContainer, tripMainContainer,
+    pointsModel, sortModel, filterModel, navigationModel) {
+
     this._tripContainer = tripContainer;
     this._navigationContainer = navigationContainer;
     this._filtersContainer = filtersContainer;
     this._tripMainContainer = tripMainContainer;
-    this._sortPublisher = new SortPublisher();
+
+    this._pointsModel = pointsModel;
+    this._sortModel = sortModel;
+    this._filterModel = filterModel;
+    this._navigationModel = navigationModel;
   }
 
-  init (wayPoints, cities, types, destinations, offers, activeFilterParam, activeNavParam) {
-    this._points = wayPoints;
+  init (cities, types, destinations, offers) {
     this._cities = cities;
     this._types = types;
     this._destinations = destinations;
     this._offers = offers;
-    this._activeFilterParam = activeFilterParam;
-    this._activeNavParam = activeNavParam;
 
-    this._renderElements();
-  }
+    const pointsPresenter = new PointsPresenter(this._tripContainer, this._pointsModel, this._sortModel, this._filterModel);
+    pointsPresenter.init(this._cities, this._types, this._destinations, this._offers);
 
-  _renderElements() {
-    if(this._points.length > 0) {
-      this._renderPoints();
-      this._renderSort();
-      this._renderNavigation();
-      this._renderFilters();
-      this._renderInfo();
-    } else {
-      this._renderNoPoins();
-    }
-  }
-
-  _renderPoints () {
-    const pointsPresenter = new PointPresenter(this._tripContainer, this._sortPublisher);
-    pointsPresenter.init(this._points, this._cities, this._types, this._destinations, this._offers);
-  }
-
-  _renderSort () {
-    const sortPresenter = new SortPresenter(this._tripContainer, this._sortPublisher);
+    const sortPresenter = new SortPresenter(this._tripContainer, this._sortModel, this._filterModel);
     sortPresenter.init();
-  }
 
-  _renderNavigation () {
-    const navigationPresenter = new NavigationPresenter(this._navigationContainer);
-    navigationPresenter.init(this._activeNavParam);
-  }
+    const navigationPresenter = new NavigationPresenter(this._navigationContainer, this._navigationModel);
+    navigationPresenter.init();
 
-  _renderFilters () {
-    const filtersPresenter = new FilterPresenter(this._filtersContainer);
-    filtersPresenter.init(this._activeFilterParam);
-  }
+    const filtersPresenter = new FilterPresenter(this._filtersContainer, this._filterModel, this._pointsModel, this._sortModel);
+    filtersPresenter.init();
 
-  _renderInfo () {
-    const infoPresenter = new InfoPresenter(this._tripMainContainer);
-    infoPresenter.init(this._points);
-  }
-
-  _renderNoPoins () {
-    const noPoinsElement = new NoEventsComponentView();
-    render(this._tripContainer, noPoinsElement, RenderPosition.BEFOREEND);
+    const infoPresenter = new InfoPresenter(this._tripMainContainer, this._pointsModel);
+    infoPresenter.init();
   }
 }
 

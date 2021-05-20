@@ -44,20 +44,6 @@ export const createElement = (template) => {
   return newElement.firstChild;
 };
 
-export const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
 export const getDiffDates = (start, end, unitMeasure) => dayjs(end).diff(dayjs(start), unitMeasure);
 
 const getFormatTime = (period) => {
@@ -84,10 +70,12 @@ export const getPeriod = (dateFrom, dateTo) => {
 
 export const getDateInFormat = (date, type) => dayjs(date).format(type);
 
-export const sortPointsTime = (pointPrev, pointNext) => {
+export const sortPointsByTime = (pointPrev, pointNext) => {
   const periodPrev = getDiffDates(pointPrev.dateFrom, pointPrev.dateTo,'second');
   const periodNext = getDiffDates(pointNext.dateFrom, pointNext.dateTo,'second');
   return periodNext - periodPrev;
 };
 
-export const sortPointsPrice = (pointPrev, pointNext) => pointPrev.basePrice - pointNext.basePrice;
+export const sortPointsByPrice = (pointPrev, pointNext) => pointNext.basePrice - pointPrev.basePrice;
+
+export const sortPointsByDay = (pointPrev, pointNext) => getDiffDates(pointNext.dateFrom,pointPrev.dateFrom, 'second');

@@ -21,9 +21,9 @@ const createTripSortTemplate = (sortParameters, activeSortType) => {
 };
 
 export default class TripSort extends Abstract{
-  constructor(sortParameters, activeParam) {
+  constructor(sortTypes, activeParam) {
     super();
-    this._sortParameters = sortParameters;
+    this._sortParameters = sortTypes;
     this._activeParam = activeParam;
     this._sortButtonClickHandler = this._sortButtonClickHandler.bind(this);
   }

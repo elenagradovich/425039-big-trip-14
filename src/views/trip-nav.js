@@ -1,6 +1,7 @@
 import Abstract from './abstract';
+import { NavParameters } from '../const';
 
-const createTripNavigationTemplate = (navParameters, activeType = navParameters[0]) => {
+const createTripNavigationTemplate = (navParameters, activeType) => {
   const createMenuTemplates = navParameters.map((menuParam) => `<a class="trip-tabs__btn  ${activeType === menuParam ? 'trip-tabs__btn--active' : ''} href="#">
     ${menuParam}</a>`).join(' ');
 
@@ -10,9 +11,9 @@ const createTripNavigationTemplate = (navParameters, activeType = navParameters[
 };
 
 export default class TripNavigation extends Abstract{
-  constructor(navParameters, activeParam) {
+  constructor(activeParam) {
     super();
-    this._navParameters = navParameters;
+    this._navParameters = Object.values(NavParameters);
     this._activeParam = activeParam;
   }
 

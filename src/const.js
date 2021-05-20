@@ -3,9 +3,16 @@ export const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
-export const FilterParameters = ['Everything', 'Future', 'Past'];
+export const FilterTypes = {
+  EVERYTHING: 'Everything',
+  FUTURE: 'Future',
+  PAST: 'Past',
+};
 
-export const NavParameters = ['Stats', 'Table'];
+export const NavParameters = {
+  TABLE: 'Table',
+  STATS: 'Stats',
+};
 
 export const Mode = {
   DEFAULT: 'DEFAULT',
@@ -26,6 +33,17 @@ export const DateFormat = {
   DATE_TIME: 'MMM DD HH:MM',
   DATE_FULL: 'YYYY-MM-DD',
   DEFAULT: 'DD/MM/YY HH:MM',
+};
+
+export const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MAJOR: 'MAJOR',
 };
 
 
