@@ -1,4 +1,4 @@
-import { FilterParameters, NavParameters } from '../const';
+import { FilterTypes, NavParameters } from '../const';
 import { getRandomValue } from '../utils/common';
 import { generateWaypoint, generateImages } from './waypoint';
 
@@ -173,7 +173,7 @@ export const destinations = cities.map((city) => {
 export const activeNavParam = NavParameters[getRandomValue(NavParameters.length-1)];
 
 //Filters
-export const activeFilterParam = FilterParameters[getRandomValue(FilterParameters.length-1)];
+export const activeFilterParam = FilterTypes[getRandomValue(FilterTypes.length-1)];
 
 //Points data
 const TASK_AMOUNT = 20;

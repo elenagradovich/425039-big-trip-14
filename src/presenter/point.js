@@ -1,7 +1,7 @@
 import TripPointView from '../views/trip-point';
 import TripEditPointView from '../views/trip-edit-point';
 import { remove, render, replace } from '../utils/render';
-import { RenderPosition, Mode } from '../const';
+import { RenderPosition, Mode, UserAction, UpdateType } from '../const';
 
 export default class Point {
   constructor(container, cities, types, destinations, offers, changeData, changeMode) {
@@ -21,6 +21,7 @@ export default class Point {
     this._handlePointClose = this._handlePointClose.bind(this);
     this._handleSubmitClick = this._handleSubmitClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   init(point) {
@@ -28,11 +29,12 @@ export default class Point {
     this._prevPoint = this._tripPointComponent;
     this._prevEditPoint = this._tripEditPointComponent;
     this._tripPointComponent = new TripPointView(point);
-    this._tripEditPointComponent = new TripEditPointView(point, this._cities, this._types, this._destinations, this._offers);
+    this._tripEditPointComponent = new TripEditPointView(this._cities, this._types, this._destinations, this._offers, point);
 
     this._tripPointComponent.setRollupButtonClickHandler(this._handlePointOpen);
     this._tripEditPointComponent.setRollupButtonClickHandler(this._handlePointClose);
     this._tripEditPointComponent.setSubmitClickHandler(this._handleSubmitClick);
+    this._tripEditPointComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     this._tripPointComponent.setFavouriteButtonClickHandler(this._handleFavoriteClick);
 
@@ -76,7 +78,6 @@ export default class Point {
   _handlePointOpen() {
     this._replacePointToEditPoint();
     document.addEventListener('keydown', this._handleEscKeyDown);
-
   }
 
   _handlePointClose() {
@@ -86,13 +87,28 @@ export default class Point {
   }
 
   _handleSubmitClick(point) {
-    this._changeData(point);
+    this._changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MAJOR,
+      point);
     this._replaceEditPointToPoint();
+    document.removeEventListener('keydown', this._handleEscKeyDown);
+  }
+
+  _handleDeleteClick(point) {
+    this._changeData(
+      UserAction.DELETE_POINT,
+      UpdateType.MAJOR,
+      point);
+    this._handlePointClose();
+    this.destroy();
     document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
   _handleFavoriteClick() {
     this._changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.PATCH,
       Object.assign({}, this._point, {isFavorite: !this._point.isFavorite},
       ),
     );
