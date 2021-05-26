@@ -19,14 +19,9 @@ export default class Main {
     this._navigationModel = navigationModel;
   }
 
-  init (cities, types, destinations, offers) {
-    this._cities = cities;
-    this._types = types;
-    this._destinations = destinations;
-    this._offers = offers;
-
+  init () {
     const pointsPresenter = new PointsPresenter(this._tripContainer, this._pointsModel, this._sortModel, this._filterModel);
-    pointsPresenter.init(this._cities, this._types, this._destinations, this._offers);
+    pointsPresenter.init();
 
     const sortPresenter = new SortPresenter(this._tripContainer, this._sortModel, this._filterModel);
     sortPresenter.init();
