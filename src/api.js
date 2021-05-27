@@ -76,6 +76,7 @@ export default class Api {
   }
 
   static catchError(err) {
+    alert(err);
     throw err;
   }
 }

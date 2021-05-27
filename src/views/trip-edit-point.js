@@ -1,7 +1,7 @@
 import SmartView from './smart';
 import dayjs from 'dayjs';
 import { getDateInFormat, getDiffDates } from '../utils/common';
-import {DateFormat, TypeIcons} from '../const';
+import { DateFormat, TypeIcons } from '../const';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
@@ -35,7 +35,7 @@ const createTripEditPointTemplate = (point, cities, types, offersByType) => {
     description,
     pictures,
   } = destination;
-  
+
   const createTypeTemplates = ( activeType ) => {
     return types && types.map((type) => `<div class="event__type-item">
       <input id="event-type-${type.toLowerCase()}-1" class="event__type-input visually-hidden"

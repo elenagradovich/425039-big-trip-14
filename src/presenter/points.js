@@ -9,14 +9,17 @@ import { RenderPosition, SortTypes, UpdateType, UserAction, FilterTypes } from '
 import LoadingComponentView from '../views/trip-loading';
 
 export default class Points {
-  constructor(container, pointsModel, sortModel, filterModel) {
+  constructor(container, pointsModel, sortModel, filterModel, api) {
     this._isLoading = true;
     this._container = container;
     this._pointsComponent = null;
     this._pointPresenterContainer = {};
+
     this._filterModel = filterModel;
     this._sortModel = sortModel;
     this._pointsModel = pointsModel;
+    this._api = api;
+
     this._noPoinsComponent = new NoEventsComponentView();
     this._loadingComponent = new LoadingComponentView();
 
@@ -106,7 +109,9 @@ export default class Points {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updateTask(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case UserAction.ADD_POINT:
         this._pointsModel.addPoint(updateType, update);

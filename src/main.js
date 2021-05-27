@@ -22,7 +22,7 @@ const filterModel = new FilterModel();
 const navigationModel = new NavigationModel();
 
 const tripPresenter = new MainPresenter(tripPointsContainer, tripNavigationContainer, tripFiltersContainer, tripMainContainer,
-  pointsModel, sortModel, filterModel, navigationModel);
+  pointsModel, sortModel, filterModel, navigationModel, api);
 tripPresenter.init();
 
 api.getDestinations()
@@ -43,7 +43,6 @@ api.getOffers()
 
 api.getPoints()
   .then((points) => {
-     
     pointsModel.setPoints(UpdateType.INIT, points);
   })
   .catch(() => {

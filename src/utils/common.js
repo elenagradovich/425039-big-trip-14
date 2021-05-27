@@ -1,21 +1,8 @@
 import dayjs from 'dayjs';
-import { offerList } from '../mock/data';
 
 const MIN_PERIOD_IN_MINUTES = 1;
 const MINUTES_IN_HOUR = 60;
 const MINUTES_IN_DAY = 24 * 60;
-
-export const getRandomValue = (maxLength = 1, minLength = 0) => {
-  const lower = Math.ceil(Math.min(minLength, maxLength));
-  const upper = Math.floor(Math.max(minLength, maxLength));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-export const getActiveOffers = (type) => {
-  const arr = offerList.filter((item) => item.type === type);
-  return arr[0].offers.slice(0, 1);
-};
 
 export const getPointCities = (eventPoints) => {
   const cities = new Set();
