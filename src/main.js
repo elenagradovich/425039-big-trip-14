@@ -4,7 +4,6 @@ import SortModel from './model/sort';
 import FilterModel from './model/filters';
 import NavigationModel from './model/navigation';
 import API from './api';
-import { UpdateType } from './const';
 
 const tripPointsContainer = document.querySelector('.trip-events');
 const tripMainContainer = document.querySelector('.trip-main');
@@ -12,7 +11,7 @@ const tripNavigationContainer = tripMainContainer.querySelector('.trip-controls_
 const tripFiltersContainer = tripMainContainer.querySelector('.trip-controls__filters');
 
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
-const AUTHORIZATION = 'Basic ulIa5599g860rad';
+const AUTHORIZATION = 'Basic ulIa5509g860rat';
 
 const api = new API(END_POINT, AUTHORIZATION);
 
@@ -25,28 +24,4 @@ const tripPresenter = new MainPresenter(tripPointsContainer, tripNavigationConta
   pointsModel, sortModel, filterModel, navigationModel, api);
 tripPresenter.init();
 
-api.getDestinations()
-  .then((destinations) => {
-    pointsModel.setDestinations(destinations);
-  })
-  .catch(() => {
-    pointsModel.setDestinations([]);
-  });
-
-api.getOffers()
-  .then((offers) => {
-    pointsModel.setOffers(offers);
-  })
-  .catch(() => {
-    pointsModel.setOffers([]);
-  });
-
-api.getPoints()
-  .then((points) => {
-    pointsModel.setPoints(UpdateType.INIT, points);
-  })
-  .catch(() => {
-    pointsModel.setPoints(UpdateType.INIT, []);
-  });
-
-
+api.getInitialData(pointsModel);
