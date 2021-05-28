@@ -5,7 +5,7 @@ import PointNewPresenter from './point-new';
 import { render, remove } from '../utils/render';
 import { filter } from '../utils/filter';
 import { sortPointsByPrice, sortPointsByTime, sortPointsByDay } from '../utils/common';
-import { RenderPosition, SortTypes, UpdateType, UserAction, FilterTypes } from '../const';
+import { RenderPosition, SortTypes, UpdateType, UserAction, FilterTypes, ActionState } from '../const';
 import LoadingComponentView from '../views/trip-loading';
 
 export default class Points {
@@ -64,6 +64,7 @@ export default class Points {
       this._pointsComponent,
       this._pointsModel,
       this._handleViewAction, this._handleModeChange);
+
     pointPresenter.init(point);
     this._pointPresenterContainer[point.id] = pointPresenter;
   }
@@ -109,15 +110,22 @@ export default class Points {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._api.updateTask(update).then((response) => {
+        this._pointPresenterContainer[update.id].setViewState(ActionState.SAVING);
+        this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
         });
         break;
       case UserAction.ADD_POINT:
-        this._pointsModel.addPoint(updateType, update);
+        this._pointNewPresenter.setSaving();
+        this._api.addPoint(update).then((response) => {
+          this._pointsModel.addPoint(updateType, response);
+        });
         break;
       case UserAction.DELETE_POINT:
-        this._pointsModel.deletePoint(updateType, update);
+        this._pointPresenterContainer[update.id].setViewState(ActionState.DELETING);
+        this._api.deletePoint(update).then(() => {
+          this._pointsModel.deletePoint(updateType, update.id);
+        });
         break;
     }
   }

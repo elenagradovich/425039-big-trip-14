@@ -4,6 +4,8 @@ import PointsModel from './model/points';
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 const URLS = {
@@ -59,15 +61,33 @@ export default class Api {
       .then(Api.toJSON);
   }
 
-  updateTask(point) {
+  updatePoint(point) {
     return this._load({
-      url: `points/${point.id}`,
+      url: `${URLS.POINTS}/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(PointsModel.adaptPointToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
       .then(Api.toJSON)
       .then(PointsModel.adaptPointToClient);
+  }
+
+  addPoint(point) {
+    return this._load({
+      url: `${URLS.POINTS}`,
+      method: Method.POST,
+      body: JSON.stringify(PointsModel.adaptPointToServer(point)),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    })
+      .then(Api.toJSON)
+      .then(PointsModel.adaptPointToClient);
+  }
+
+  deletePoint(point) {
+    return this._load({
+      url: `${URLS.POINTS}/${point.id}`,
+      method: Method.DELETE,
+    });
   }
 
   _load({

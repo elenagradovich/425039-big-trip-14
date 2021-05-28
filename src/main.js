@@ -19,9 +19,10 @@ const pointsModel = new PointsModel();
 const sortModel = new SortModel();
 const filterModel = new FilterModel();
 const navigationModel = new NavigationModel();
+api.getInitialData(pointsModel);
 
 const tripPresenter = new MainPresenter(tripPointsContainer, tripNavigationContainer, tripFiltersContainer, tripMainContainer,
   pointsModel, sortModel, filterModel, navigationModel, api);
 tripPresenter.init();
 
-api.getInitialData(pointsModel);
+

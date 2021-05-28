@@ -71,6 +71,13 @@ export default class PointNew {
     }
   }
 
+  setSaving() {
+    this._newPointComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
   destroy() {
     if (this._newPointComponent === null) {
       return;

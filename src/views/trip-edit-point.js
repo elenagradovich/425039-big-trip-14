@@ -28,6 +28,9 @@ const createTripEditPointTemplate = (point, cities, types, offersByType) => {
     type,
     offers,
     isSaveDisabled,
+    isDisabled,
+    isSaving,
+    isDeleting,
   } = point;
 
   const {
@@ -82,7 +85,10 @@ const createTripEditPointTemplate = (point, cities, types, offersByType) => {
             <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
-                    <label class="event__type  event__type-btn" for="event-type-toggle-1">
+                    <label
+                      class="event__type  event__type-btn"
+                      for="event-type-toggle-1">
+                      ${isDisabled ? 'disabled' : ''}
                       <span class="visually-hidden">Choose event type</span>
                       ${type && `<img class="event__type-icon"
                         width="17"
@@ -110,6 +116,7 @@ const createTripEditPointTemplate = (point, cities, types, offersByType) => {
                       name="event-destination"
                       value="${name}"
                       list="destination-list-1">
+                      ${isDisabled ? 'disabled' : ''}
                     <datalist id="destination-list-1">
                       ${createCityOptions(cities)}
                     </datalist>
@@ -117,10 +124,22 @@ const createTripEditPointTemplate = (point, cities, types, offersByType) => {
 
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom} ${dateFrom && getDateInFormat(dateFrom, DateFormat.DEFAULT)}">
+                    <input
+                      class="event__input  event__input--time"
+                      id="event-start-time-1"
+                      type="text"
+                      name="event-start-time"
+                      ${isDisabled ? 'disabled' : ''}
+                      value="${dateFrom} ${dateFrom && getDateInFormat(dateFrom, DateFormat.DEFAULT)}">
                     <span>&#8212;</span>
                     <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo} ${dateTo && getDateInFormat(dateTo, DateFormat.DEFAULT)}">
+                    <input
+                      class="event__input  event__input--time"
+                      id="event-end-time-1"
+                      type="text"
+                      name="event-end-time"
+                      ${isDisabled ? 'disabled' : ''}
+                      value="${dateTo} ${dateTo && getDateInFormat(dateTo, DateFormat.DEFAULT)}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">
@@ -128,12 +147,26 @@ const createTripEditPointTemplate = (point, cities, types, offersByType) => {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" name="event-price" type="number"
+                    <input
+                      class="event__input  event__input--price"
+                      id="event-price-1"
+                      name="event-price"
+                      type="number"
+                      ${isDisabled ? 'disabled' : ''}
                       value="${basePrice}">
                   </div>
-
-                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isSaveDisabled ? 'disabled' : ''}>Save</button>
-                  <button class="event__reset-btn" type="reset">Delete</button>
+                  <button
+                    class="event__save-btn  btn  btn--blue"
+                    type="submit"
+                    ${isSaveDisabled || isDisabled ? 'disabled...' : ''}>
+                      ${isSaving ? 'Saving...' : 'Save'}
+                  </button>
+                  <button
+                    class="event__reset-btn"
+                    type="reset"
+                    ${isDisabled ? 'disabled' : ''}>
+                    ${isDeleting ? 'Deleting...' : 'Delete'}
+                  </button>
                   <button class="event__rollup-btn" type="button">
                     <span class="visually-hidden">Open event</span>
                   </button>
@@ -206,12 +239,19 @@ export default class TripEditPoint extends SmartView {
   static parseTripPointToState(point) {
     return {
       ...point,
-      isSaveDisabled: !point.destination.name};
+      isSaveDisabled: !point.destination.name,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    };
   }
 
   static parseStateToTripPoint(state) {
     state = {...state};
     delete state.isSaveDisabled;
+    delete state.isDisabled;
+    delete state.isSaving;
+    delete state.isDeleting;
 
     return state;
   }

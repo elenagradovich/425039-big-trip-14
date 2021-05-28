@@ -1,7 +1,7 @@
 import TripPointView from '../views/trip-point';
 import TripEditPointView from '../views/trip-edit-point';
 import { remove, render, replace } from '../utils/render';
-import { RenderPosition, Mode, UserAction, UpdateType } from '../const';
+import { RenderPosition, Mode, UserAction, UpdateType, ActionState } from '../const';
 
 export default class Point {
   constructor(container, pointsModel, changeData, changeMode) {
@@ -26,7 +26,6 @@ export default class Point {
     this._cities = this._pointsModel.getCities();
     this._types = this._pointsModel.getTypes();
     this._offers = this._pointsModel.getOffers();
-    debugger
 
     this._point = point;
     this._prevPoint = this._tripPointComponent;
@@ -112,9 +111,26 @@ export default class Point {
     this._changeData(
       UserAction.UPDATE_POINT,
       UpdateType.PATCH,
-      Object.assign({}, this._point, {isFavorite: !this._point.isFavorite},
-      ),
+      {...this._point,
+        isFavorite: !this._point.isFavorite},
     );
+  }
+
+  setViewState(state) {
+    switch (state) {
+      case ActionState.SAVING:
+        this._tripEditPointComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case ActionState.DELETING:
+        this._tripEditPointComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+    }
   }
 
   resetView() {
