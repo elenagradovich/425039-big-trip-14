@@ -17,6 +17,7 @@ export default class Main {
     this._sortModel = sortModel;
     this._filterModel = filterModel;
     this._navigationModel = navigationModel;
+
     this._api = api;
   }
 

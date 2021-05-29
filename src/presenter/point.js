@@ -26,7 +26,6 @@ export default class Point {
     this._cities = this._pointsModel.getCities();
     this._types = this._pointsModel.getTypes();
     this._offers = this._pointsModel.getOffers();
-    debugger
 
     this._point = point;
     this._prevPoint = this._tripPointComponent;
@@ -112,8 +111,9 @@ export default class Point {
     this._changeData(
       UserAction.UPDATE_POINT,
       UpdateType.PATCH,
-      Object.assign({}, this._point, {isFavorite: !this._point.isFavorite},
-      ),
+      {...this._point,
+        isFavorite: !this._point.isFavorite,
+      },
     );
   }
 

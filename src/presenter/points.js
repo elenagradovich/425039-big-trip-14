@@ -109,7 +109,7 @@ export default class Points {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._api.updateTask(update).then((response) => {
+        this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
         });
         break;
