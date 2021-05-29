@@ -4,12 +4,17 @@ const MIN_PERIOD_IN_MINUTES = 1;
 const MINUTES_IN_HOUR = 60;
 const MINUTES_IN_DAY = 24 * 60;
 
+const MAX_CITIES_VIEW = 3;
+
 export const getPointCities = (eventPoints) => {
-  const cities = new Set();
-  for(const point of eventPoints) {
-    cities.add(point.destination.name);
+  const pointsLength = eventPoints.length;
+  if(eventPoints && pointsLength <= MAX_CITIES_VIEW) {
+    const cities = new Set();
+    eventPoints.forEach((point) => cities.add(point.destination.name));
+    return Array.from(cities);
   }
-  return Array.from(cities);
+
+  return `${eventPoints[0]}...${eventPoints[pointsLength - 1]}`;
 };
 
 export const getFullEventPrice = (point) => {

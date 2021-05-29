@@ -1,5 +1,7 @@
-import { UpdateType } from './const';
+import {RenderPosition, UpdateType} from './const';
 import PointsModel from './model/points';
+import ErrorViewComponent from './views/trip-error';
+import {render} from './utils/render';
 
 const Method = {
   GET: 'GET',
@@ -19,9 +21,10 @@ const HTTP_STATUS = {
 };
 
 export default class Api {
-  constructor(endPoint, authorization) {
+  constructor(endPoint, authorization, errorContainer) {
     this._endPoint = endPoint;
     this._authorization = authorization;
+    this._errorContainer  = errorContainer;
   }
 
   getInitialData(pointsModel) {
@@ -30,11 +33,14 @@ export default class Api {
     const requests = urls.map((url) => this._load({url: url}));
 
     Promise.all(requests)
-      .catch(() => [[], [], []])
       .then((responses) => {
         this._pointsModel.setOffers(responses[0]);
         this._pointsModel.setDestinations(responses[1]);
         this._pointsModel.setPoints(UpdateType.INIT, responses[2].map((point) => PointsModel.adaptPointToClient(point)));
+      })
+      .catch(() => {
+        this._errorComponent = new ErrorViewComponent('Data not available, reload this page');
+        render(this._errorContainer , this._errorComponent, RenderPosition.BEFOREEND);
       });
   }
 

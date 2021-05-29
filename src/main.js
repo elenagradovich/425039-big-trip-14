@@ -5,6 +5,7 @@ import FilterModel from './model/filters';
 import NavigationModel from './model/navigation';
 import API from './api';
 
+const errorContainer = document.querySelector('body');
 const tripPointsContainer = document.querySelector('.trip-events');
 const tripMainContainer = document.querySelector('.trip-main');
 const tripNavigationContainer = tripMainContainer.querySelector('.trip-controls__navigation');
@@ -13,7 +14,7 @@ const tripFiltersContainer = tripMainContainer.querySelector('.trip-controls__fi
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 const AUTHORIZATION = 'Basic ulIa5509g860rat';
 
-const api = new API(END_POINT, AUTHORIZATION);
+const api = new API(END_POINT, AUTHORIZATION, errorContainer);
 
 const pointsModel = new PointsModel();
 const sortModel = new SortModel();

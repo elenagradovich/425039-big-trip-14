@@ -2,8 +2,8 @@ import Abstract from './abstract';
 
 const createTripInfoMainTemplate = (cities, period) => {
   return `<div class="trip-info__main">
-            <h1 class="trip-info__title">${cities.join('-')}</h1>
-            <p class="trip-info__dates">${period}</p>
+            <h1 class="trip-info__title">${cities || ''}</h1>
+            <p class="trip-info__dates">${period || ''}</p>
           </div>`;
 };
 
