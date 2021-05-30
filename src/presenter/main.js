@@ -6,7 +6,7 @@ import InfoPresenter from './info';
 
 export default class Main {
   constructor(tripContainer, navigationContainer, filtersContainer, tripMainContainer,
-    pointsModel, sortModel, filterModel, navigationModel, api) {
+    pointsModel, sortModel, filterModel, navigationModel, infoModel, api) {
 
     this._tripContainer = tripContainer;
     this._navigationContainer = navigationContainer;
@@ -17,13 +17,14 @@ export default class Main {
     this._sortModel = sortModel;
     this._filterModel = filterModel;
     this._navigationModel = navigationModel;
+    this._infoModel = infoModel;
 
     this._api = api;
   }
 
   init () {
     const pointsPresenter = new PointsPresenter(this._tripContainer,
-      this._pointsModel, this._sortModel, this._filterModel, this._api);
+      this._pointsModel, this._sortModel, this._filterModel, this._infoModel,  this._api);
     pointsPresenter.init();
 
     const sortPresenter = new SortPresenter(this._tripContainer, this._sortModel, this._filterModel);
@@ -35,7 +36,7 @@ export default class Main {
     const filtersPresenter = new FilterPresenter(this._filtersContainer, this._filterModel, this._pointsModel, this._sortModel);
     filtersPresenter.init();
 
-    const infoPresenter = new InfoPresenter(this._tripMainContainer, this._pointsModel);
+    const infoPresenter = new InfoPresenter(this._tripMainContainer, this._infoModel);
     infoPresenter.init();
   }
 }

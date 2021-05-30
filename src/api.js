@@ -27,8 +27,9 @@ export default class Api {
     this._errorContainer  = errorContainer;
   }
 
-  getInitialData(pointsModel) {
+  getInitialData(pointsModel, infoModel) {
     this._pointsModel = pointsModel;
+    this._infoModel = infoModel;
     const urls = [END_POINT.OFFERS, END_POINT.DESTINATIONS, END_POINT.POINTS];
     const requests = urls.map((url) => this._load({url: url}));
 
@@ -37,6 +38,7 @@ export default class Api {
         this._pointsModel.setOffers(responses[0]);
         this._pointsModel.setDestinations(responses[1]);
         this._pointsModel.setPoints(UpdateType.INIT, responses[2].map((point) => PointsModel.adaptPointToClient(point)));
+        this._infoModel.setInfoData(this._pointsModel.getPoints());
       })
       .catch(() => {
         this._errorComponent = new ErrorViewComponent('Data not available, reload this page');

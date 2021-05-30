@@ -3,6 +3,7 @@ import PointsModel from './model/points';
 import SortModel from './model/sort';
 import FilterModel from './model/filters';
 import NavigationModel from './model/navigation';
+import InfoModel from './model/info';
 import API from './api';
 
 const errorContainer = document.querySelector('body');
@@ -20,9 +21,10 @@ const pointsModel = new PointsModel();
 const sortModel = new SortModel();
 const filterModel = new FilterModel();
 const navigationModel = new NavigationModel();
+const infoModel = new InfoModel();
 
 const tripPresenter = new MainPresenter(tripPointsContainer, tripNavigationContainer, tripFiltersContainer, tripMainContainer,
-  pointsModel, sortModel, filterModel, navigationModel, api);
+  pointsModel, sortModel, filterModel, navigationModel, infoModel, api);
 tripPresenter.init();
 
-api.getInitialData(pointsModel);
+api.getInitialData(pointsModel, infoModel);

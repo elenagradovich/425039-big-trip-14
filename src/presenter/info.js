@@ -1,44 +1,51 @@
 import { RenderPosition } from '../const';
-import { render } from '../utils/render';
+import {remove, render, replace} from '../utils/render';
 import TripInfoView from '../views/trip-info-container';
 import TripInfoMainView from '../views/trip-info-main';
 import TripInfoCostView from '../views/trip-info-cost';
-import { getEventPriceSum, getPointCities } from '../utils/common';
 
 
 export default class InfoPresenter {
-  constructor(container, pointsModel) {
+  constructor(container, infoModel) {
     this._container = container;
     this._elementWrapper = null;
-    this._cities = [];
-    this._cost = null;
-    this._pointsModel = pointsModel;
+    this._elementInfoCost = null;
+    this._elementInfoMain = null;
+    this._infoModel = infoModel;
+    this._infoModel.subscribe(this._handleModelEvent);
   }
 
   init() {
+    const prevElementWrapper = this._elementWrapper;
+    const prevElementInfoCost =  this._elementInfoCost;
+    const prevElementInfoMain = this._elementInfoMain;
+
     this._elementWrapper = new TripInfoView();
+    this._elementInfoCost = new TripInfoCostView(this._infoModel.getRouteCost());
+    this._elementInfoMain = new TripInfoMainView(this._infoModel.getRouteCities(), this._infoModel.getRoutePeriod());
+
+    if (prevElementWrapper === null && prevElementInfoCost === null && prevElementInfoMain === null) {
+      this._renderInfoComponents();
+      return;
+    }
+
+    replace(this._elementWrapper, prevElementWrapper);
+    remove(prevElementWrapper);
+
+    replace(this._elementInfoCost, prevElementInfoCost);
+    remove(prevElementInfoCost);
+
+    replace(this._elementInfoMain, prevElementInfoMain);
+    remove(prevElementInfoMain);
+  }
+
+  _handleModelEvent() {
+    this.init();
+  }
+
+  _renderInfoComponents() {
     render(this._container, this._elementWrapper, RenderPosition.AFTERBEGIN);
-    this._renderCostInfo();
-    this._renderCitiesInfo();
-  }
-
-  _getCities () {
-    this._cities =  getPointCities(this._pointsModel.getPoints());
-  }
-
-  _getCost () {
-    this._cost =  getEventPriceSum(this._pointsModel.getPoints());
-  }
-
-  _renderCostInfo() {
-    this._getCost();
-    const tripInfoCost = new TripInfoCostView(this._cost);
-    render(this._elementWrapper, tripInfoCost, RenderPosition.AFTERBEGIN);
-  }
-
-  _renderCitiesInfo() {
-    this._getCities();
-    const tripInfoMain = new TripInfoMainView(this._cities);
-    render(this._elementWrapper, tripInfoMain, RenderPosition.AFTERBEGIN);
+    render(this._elementWrapper, this._elementInfoCost , RenderPosition.AFTERBEGIN);
+    render(this._elementWrapper, this._elementInfoMain, RenderPosition.AFTERBEGIN);
   }
 }

@@ -9,7 +9,7 @@ import { RenderPosition, SortTypes, UpdateType, UserAction, FilterTypes } from '
 import LoadingComponentView from '../views/trip-loading';
 
 export default class Points {
-  constructor(container, pointsModel, sortModel, filterModel, api) {
+  constructor(container, pointsModel, sortModel, filterModel, infoModel, api) {
     this._isLoading = true;
     this._container = container;
     this._pointsComponent = null;
@@ -18,6 +18,8 @@ export default class Points {
     this._filterModel = filterModel;
     this._sortModel = sortModel;
     this._pointsModel = pointsModel;
+    this._infoModel = infoModel;
+
     this._api = api;
 
     this._noPoinsComponent = new NoEventsComponentView();
@@ -83,11 +85,11 @@ export default class Points {
     }
     const points = this._getPoints();
     const pointsCount = points.length;
-
     if (pointsCount === 0) {
       this._renderNoTasks();
       return;
     }
+
     const sortType = this._sortModel.getActiveSortType();
     const sortedPoints = this._sortPoints(points, sortType);
     sortedPoints.forEach((point) => this._renderPoint(point));
@@ -111,6 +113,7 @@ export default class Points {
       case UserAction.UPDATE_POINT:
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
+          this._infoModel.setInfoData(this._pointsModel.getPoints());
         });
         break;
       case UserAction.ADD_POINT:
