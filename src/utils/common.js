@@ -27,8 +27,7 @@ export const getFullEventsPeriod = (eventPoints) => {
 
 export const getFullEventPrice = (point) => {
   const { basePrice, offers } = point;
-  const offerPricesSum = offers.map((item) => item.price).reduce(((sum, item) => sum + item), basePrice);
-  return offerPricesSum + basePrice;
+  return offers.map((item) => item.price).reduce(((sum, item) => sum + item), basePrice);
 };
 
 export const getEventPriceSum = (eventPoints) => {

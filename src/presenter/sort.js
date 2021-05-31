@@ -21,7 +21,6 @@ export default class SortPresenter {
   init() {
     const sortTypes = this._getSortTypes();
     const prevSortComponent = this._element;
-
     this._element = new TripSortView(sortTypes, this._sortModel.getActiveSortType());
     this._element.setSortButtonClickHandler(this._handleSortTypeChange);
 
