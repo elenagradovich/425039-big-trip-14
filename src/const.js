@@ -58,5 +58,11 @@ export const TypeIcons = new Map(Object.entries({
   'taxi': 'img/icons/taxi.png',
   'train': 'img/icons/train.png',
   'transport': 'img/icons/transport.png',
-  'drive': 'img/icons/transport.png',
+  'drive': 'img/icons/drive.png',
 }));
+
+export const ActionState = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};

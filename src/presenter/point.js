@@ -1,7 +1,7 @@
 import TripPointView from '../views/trip-point';
 import TripEditPointView from '../views/trip-edit-point';
 import { remove, render, replace } from '../utils/render';
-import { RenderPosition, Mode, UserAction, UpdateType } from '../const';
+import { RenderPosition, Mode, UserAction, UpdateType, ActionState } from '../const';
 
 export default class Point {
   constructor(container, pointsModel, changeData, changeMode) {
@@ -93,8 +93,6 @@ export default class Point {
       UserAction.UPDATE_POINT,
       UpdateType.MAJOR,
       point);
-    this._replaceEditPointToPoint();
-    document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
   _handleDeleteClick(point) {
@@ -102,9 +100,6 @@ export default class Point {
       UserAction.DELETE_POINT,
       UpdateType.MAJOR,
       point);
-    this._handlePointClose();
-    this.destroy();
-    document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
   _handleFavoriteClick() {
@@ -115,6 +110,35 @@ export default class Point {
         isFavorite: !this._point.isFavorite,
       },
     );
+  }
+
+  setViewState(state) {
+    const resetFormState = () => {
+      this._tripEditPointComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    switch (state) {
+      case ActionState.SAVING:
+        this._tripEditPointComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case ActionState.DELETING:
+        this._tripEditPointComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case ActionState.ABORTING:
+        this._tripPointComponent.shake(resetFormState);
+        this._tripEditPointComponent.shake(resetFormState);
+        break;
+    }
   }
 
   resetView() {
