@@ -1,44 +1,35 @@
 import { RenderPosition } from '../const';
-import { render } from '../utils/render';
-import TripInfoView from '../views/trip-info-container';
-import TripInfoMainView from '../views/trip-info-main';
-import TripInfoCostView from '../views/trip-info-cost';
-import { getEventPriceSum, getPointCities } from '../utils/common';
+import { remove, render, replace } from '../utils/render';
+import TripInfoView from '../views/trip-info';
 
 
 export default class InfoPresenter {
-  constructor(container, pointsModel) {
+  constructor(container, infoModel) {
     this._container = container;
-    this._elementWrapper = null;
-    this._cities = [];
-    this._cost = null;
-    this._pointsModel = pointsModel;
+    this._element = null;
+    this._infoModel = infoModel;
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._infoModel.subscribe(this._handleModelEvent);
   }
 
   init() {
-    this._elementWrapper = new TripInfoView();
-    render(this._container, this._elementWrapper, RenderPosition.AFTERBEGIN);
-    this._renderCostInfo();
-    this._renderCitiesInfo();
+    const prevElement = this._element;
+    this._element = new TripInfoView(this._infoModel.getRouteCost(), this._infoModel.getRouteCities(), this._infoModel.getRoutePeriod());
+
+    if (prevElement === null) {
+      this._renderInfo();
+      return;
+    }
+
+    replace(this._element, prevElement);
+    remove(prevElement);
   }
 
-  _getCities () {
-    this._cities =  getPointCities(this._pointsModel.getPoints());
+  _handleModelEvent() {
+    this.init();
   }
 
-  _getCost () {
-    this._cost =  getEventPriceSum(this._pointsModel.getPoints());
-  }
-
-  _renderCostInfo() {
-    this._getCost();
-    const tripInfoCost = new TripInfoCostView(this._cost);
-    render(this._elementWrapper, tripInfoCost, RenderPosition.AFTERBEGIN);
-  }
-
-  _renderCitiesInfo() {
-    this._getCities();
-    const tripInfoMain = new TripInfoMainView(this._cities);
-    render(this._elementWrapper, tripInfoMain, RenderPosition.AFTERBEGIN);
+  _renderInfo() {
+    render(this._container, this._element, RenderPosition.AFTERBEGIN);
   }
 }

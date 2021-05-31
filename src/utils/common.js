@@ -1,23 +1,34 @@
 import dayjs from 'dayjs';
+import { DateFormat } from '../const';
 
 const MIN_PERIOD_IN_MINUTES = 1;
 const MINUTES_IN_HOUR = 60;
 const MINUTES_IN_DAY = 24 * 60;
 
-export const getPointCities = (eventPoints) => {
-  const cities = new Set();
-  for(const point of eventPoints) {
-    cities.add(point.destination.name);
+const MAX_CITIES_VIEW = 3;
+
+export const getRouteCities = (eventPoints) => {
+  const pointsLength = eventPoints.length;
+  if(eventPoints && pointsLength <= MAX_CITIES_VIEW) {
+    const cities = new Set();
+    eventPoints.forEach((point) => cities.add(point.destination.name));
+    return Array.from(cities);
   }
-  return Array.from(cities);
+
+  return `${eventPoints[0].destination.name} - ... - ${eventPoints[pointsLength - 1].destination.name}`;
+};
+
+export const getFullEventsPeriod = (eventPoints) => {
+  if(eventPoints && eventPoints.length > 0) {
+    const pointsLength = eventPoints.length;
+    return `${getDateInFormat(eventPoints[0].dateFrom, DateFormat.DATE_TIME)} - ${getDateInFormat(eventPoints[pointsLength - 1].dateTo, DateFormat.DATE_TIME)}`;
+  }
 };
 
 export const getFullEventPrice = (point) => {
   const { basePrice, offers } = point;
-  const offerPricesSum = offers.map((item) => item.price).reduce(((sum, item) => sum + item), basePrice);
-  return offerPricesSum + basePrice;
+  return offers.map((item) => item.price).reduce(((sum, item) => sum + item), basePrice);
 };
-
 
 export const getEventPriceSum = (eventPoints) => {
   return eventPoints.reduce((pointSum, point) => {

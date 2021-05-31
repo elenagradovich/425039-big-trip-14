@@ -112,7 +112,8 @@ export default class Point {
       UserAction.UPDATE_POINT,
       UpdateType.PATCH,
       {...this._point,
-        isFavorite: !this._point.isFavorite},
+        isFavorite: !this._point.isFavorite,
+      },
     );
   }
 
