@@ -50,8 +50,7 @@ export default class PointNew {
       UpdateType.MAJOR,
       point,
     );
-
-    this.destroy();
+    //this.destroy();
   }
 
   _handleDeleteClick() {
@@ -76,6 +75,18 @@ export default class PointNew {
       isDisabled: true,
       isSaving: true,
     });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._newPointComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this._newPointComponent.shake(resetFormState);
   }
 
   destroy() {

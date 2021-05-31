@@ -32,8 +32,11 @@ export default class Api {
   getInitialData(pointsModel, infoModel) {
     this._pointsModel = pointsModel;
     this._infoModel = infoModel;
-    const urls = [END_POINT.OFFERS, END_POINT.DESTINATIONS, END_POINT.POINTS];
-    const requests = urls.map((url) => this._load({url: url}));
+    const requests = [
+      this.loadOffers(),
+      this.loadDestinations(),
+      this.loadPoints(),
+    ];
 
     Promise.all(requests)
       .then((responses) => {
@@ -48,31 +51,32 @@ export default class Api {
       });
   }
 
-  getOffers() {
-    return this._load({url: END_POINT.OFFERS});
+  loadOffers() {
+    return this._load({url: END_POINT.OFFERS}).then(Api.toJSON);
   }
 
-  getDestinations() {
-    return this._load({url: END_POINT.DESTINATIONS});
+  loadDestinations() {
+    return this._load({url: END_POINT.DESTINATIONS}).then(Api.toJSON);
   }
 
-  getPoints() {
-    return this._load({url: END_POINT.POINTS});
+  loadPoints() {
+    return this._load({url: END_POINT.POINTS}).then(Api.toJSON);
   }
 
   updatePoint(point) {
     return this._load({
-      url: `${URLS.POINTS}/${point.id}`,
+      url: `${END_POINT.POINTS}/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(PointsModel.adaptPointToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
+      .then(Api.toJSON)
       .then(PointsModel.adaptPointToClient);
   }
 
   addPoint(point) {
     return this._load({
-      url: `${URLS.POINTS}`,
+      url: `${END_POINT.POINTS}`,
       method: Method.POST,
       body: JSON.stringify(PointsModel.adaptPointToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
@@ -83,7 +87,7 @@ export default class Api {
 
   deletePoint(point) {
     return this._load({
-      url: `${URLS.POINTS}/${point.id}`,
+      url: `${END_POINT.POINTS}/${point.id}`,
       method: Method.DELETE,
     });
   }
@@ -101,7 +105,6 @@ export default class Api {
       {method, body, headers},
     )
       .then(Api.checkStatus)
-      .then(Api.toJSON)
       .catch(Api.catchError);
   }
 

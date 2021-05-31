@@ -113,22 +113,36 @@ export default class Points {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this._pointPresenterContainer[update.id].setViewState(ActionState.SAVING);
-        this._api.updatePoint(update).then((response) => {
-          this._pointsModel.updatePoint(updateType, response);
-          this._infoModel.setInfoData(this._pointsModel.getPoints());
-        });
+        this._api.updatePoint(update)
+          .then((response) => {
+            this._pointsModel.updatePoint(updateType, response);
+            this._infoModel.setInfoData(this._pointsModel.getPoints());
+          })
+          .catch(() => {
+            this._pointPresenterContainer[update.id].setViewState(ActionState.ABORTING);
+          });
         break;
       case UserAction.ADD_POINT:
         this._pointNewPresenter.setSaving();
-        this._api.addPoint(update).then((response) => {
-          this._pointsModel.addPoint(updateType, response);
-        });
+        this._api.addPoint(update)
+          .then((response) => {
+            this._pointsModel.addPoint(updateType, response);
+            this._infoModel.setInfoData(this._pointsModel.getPoints());
+          })
+          .catch(() => {
+            this._pointNewPresenter.setAborting();
+          });
         break;
       case UserAction.DELETE_POINT:
         this._pointPresenterContainer[update.id].setViewState(ActionState.DELETING);
-        this._api.deletePoint(update).then(() => {
-          this._pointsModel.deletePoint(updateType, update.id);
-        });
+        this._api.deletePoint(update)
+          .then(() => {
+            this._pointsModel.deletePoint(updateType, update.id);
+            this._infoModel.setInfoData(this._pointsModel.getPoints());
+          })
+          .catch(() => {
+            this._pointPresenterContainer[update.id].setViewState(ActionState.ABORTING);
+          });
         break;
     }
   }

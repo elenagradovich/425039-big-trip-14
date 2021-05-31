@@ -93,8 +93,8 @@ export default class Point {
       UserAction.UPDATE_POINT,
       UpdateType.MAJOR,
       point);
-    this._replaceEditPointToPoint();
-    document.removeEventListener('keydown', this._handleEscKeyDown);
+    // this._replaceEditPointToPoint();
+    // document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
   _handleDeleteClick(point) {
@@ -102,9 +102,9 @@ export default class Point {
       UserAction.DELETE_POINT,
       UpdateType.MAJOR,
       point);
-    this._handlePointClose();
-    this.destroy();
-    document.removeEventListener('keydown', this._handleEscKeyDown);
+    // this._handlePointClose();
+    // this.destroy();
+    // document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
   _handleFavoriteClick() {
@@ -118,6 +118,14 @@ export default class Point {
   }
 
   setViewState(state) {
+    const resetFormState = () => {
+      this._tripEditPointComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
     switch (state) {
       case ActionState.SAVING:
         this._tripEditPointComponent.updateData({
@@ -130,6 +138,10 @@ export default class Point {
           isDisabled: true,
           isDeleting: true,
         });
+        break;
+      case ActionState.ABORTING:
+        this._tripPointComponent.shake(resetFormState);
+        this._tripEditPointComponent.shake(resetFormState);
         break;
     }
   }
