@@ -6,16 +6,24 @@ import { render, remove } from '../utils/render';
 import { filter } from '../utils/filter';
 import { sortPointsByPrice, sortPointsByTime, sortPointsByDay } from '../utils/common';
 import { RenderPosition, SortTypes, UpdateType, UserAction, FilterTypes } from '../const';
+import LoadingComponentView from '../views/trip-loading';
 
 export default class Points {
-  constructor(container, pointsModel, sortModel, filterModel) {
+  constructor(container, pointsModel, sortModel, filterModel, infoModel, api) {
+    this._isLoading = true;
     this._container = container;
     this._pointsComponent = null;
     this._pointPresenterContainer = {};
+
     this._filterModel = filterModel;
     this._sortModel = sortModel;
     this._pointsModel = pointsModel;
+    this._infoModel = infoModel;
+
+    this._api = api;
+
     this._noPoinsComponent = new NoEventsComponentView();
+    this._loadingComponent = new LoadingComponentView();
 
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -27,19 +35,13 @@ export default class Points {
     this._sortModel.subscribe(this._handleModelEvent);
   }
 
-  init(cities, types, destinations, offers) {
-
+  init() {
     this._pointsComponent = new TripPointsView();
     this._renderPointsContainer();
-
-    this._cities = cities;
-    this._destinations = destinations;
-    this._offers = offers;
-    this._types = types;
     this._renderPoints();
-
     this._addNewPointButtonElement = document.querySelector('.trip-main__event-add-btn');
-    this._pointNewPresenter = new PointNewPresenter(this._pointsComponent, this._cities, this._types, this._destinations, this._offers,
+    this._pointNewPresenter = new PointNewPresenter(this._pointsComponent,
+      this._pointsModel,
       this._handleViewAction, this._handleModeChange);
 
     this._addNewPointButtonElement.addEventListener('click', (evt) => {
@@ -61,7 +63,8 @@ export default class Points {
 
   _renderPoint(point) {
     const pointPresenter = new PointPresenter(
-      this._pointsComponent, this._cities, this._types, this._destinations, this._offers,
+      this._pointsComponent,
+      this._pointsModel,
       this._handleViewAction, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenterContainer[point.id] = pointPresenter;
@@ -71,14 +74,22 @@ export default class Points {
     render(this._container, this._noPoinsComponent, RenderPosition.BEFOREEND);
   }
 
+  _renderLoading() {
+    render(this._container, this._loadingComponent, RenderPosition.BEFOREEND);
+  }
+
   _renderPoints() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
     const points = this._getPoints();
     const pointsCount = points.length;
-
     if (pointsCount === 0) {
       this._renderNoTasks();
       return;
     }
+
     const sortType = this._sortModel.getActiveSortType();
     const sortedPoints = this._sortPoints(points, sortType);
     sortedPoints.forEach((point) => this._renderPoint(point));
@@ -100,7 +111,10 @@ export default class Points {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+          this._infoModel.setInfoData(this._pointsModel.getPoints());
+        });
         break;
       case UserAction.ADD_POINT:
         this._pointsModel.addPoint(updateType, update);
@@ -118,7 +132,13 @@ export default class Points {
         break;
       case UpdateType.MAJOR:
         if(!rerender) break;
-        this._clearPointsList();
+        this._clearPoints();
+        this._renderPoints();
+        break;
+      case UpdateType.INIT:
+        if(!rerender) break;
+        this._isLoading = false;
+        remove(this._loadingComponent);
         this._renderPoints();
         break;
     }
@@ -131,13 +151,14 @@ export default class Points {
     });
   }
 
-  _clearPointsList() {
+  _clearPoints() {
     this._pointNewPresenter.destroy();
     Object
       .values(this._pointPresenterContainer)
       .forEach((pointPresenter) => pointPresenter.destroy());
     this._pointPresenterContainer = {};
     remove(this._noPoinsComponent);
+    remove(this._loadingComponent);
   }
 
   createNewPoint() {

@@ -1,8 +1,7 @@
 import SmartView from './smart';
 import dayjs from 'dayjs';
 import { getDateInFormat, getDiffDates } from '../utils/common';
-import { typeIcons } from '../mock/data';
-import { DateFormat } from '../const';
+import { DateFormat, TypeIcons } from '../const';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
@@ -69,7 +68,7 @@ const createTripEditPointTemplate = (point, cities, types, offersByType) => {
     if(!pictures) {
       return '';
     }
-    return pictures.map((url) => `<img class="event__photo" src="${url}" alt="Event photo">`).join(' ');
+    return pictures.map(({src, description}) => `<img class="event__photo" src="${src}" alt="${description}">`).join(' ');
   };
 
   const createCityOptions = () => {
@@ -88,7 +87,7 @@ const createTripEditPointTemplate = (point, cities, types, offersByType) => {
                       ${type && `<img class="event__type-icon"
                         width="17"
                         height="17"
-                        src="${typeIcons.get(type.toLowerCase())}"
+                        src="${TypeIcons.get(type.toLowerCase())}"
                         alt="Event type icon">`}
                     </label>
                     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
@@ -168,11 +167,11 @@ export default class TripEditPoint extends SmartView {
     this._cities = cities;
     this._types = types;
     this._destinations = destinations;
+    this._offers = offers;
     this._initialPoint = point || DEFAULT_OFFER;
     this._state = TripEditPoint.parseTripPointToState(this._initialPoint);
     this._datePickerStart = null;
     this._datePickerEnd = null;
-    this._offers = offers;
     this._offersByCurrentType = this._getOffersByType();
 
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);

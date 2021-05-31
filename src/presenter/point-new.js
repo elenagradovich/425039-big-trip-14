@@ -1,20 +1,16 @@
 import TripEditPointView from '../views/trip-edit-point';
 import { remove, render } from '../utils/render';
 import { RenderPosition, Mode, UserAction, UpdateType } from '../const';
-import { nanoid } from 'nanoid';
 
 export default class PointNew {
-  constructor(container, cities, types, destinations, offers, changeData, changeMode) {
+  constructor(container, pointsModel, changeData, changeMode) {
     this._point = null;
     this._container = container;
     this._newPointComponent = null;
-    this._cities = cities;
-    this._types = types;
-    this._destinations = destinations;
-    this._offers = offers;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._mode = Mode.DEFAULT;
+    this._pointsModel = pointsModel;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handlePointClose = this._handlePointClose.bind(this);
@@ -29,6 +25,10 @@ export default class PointNew {
 
     this._changeMode();
     this._mode = Mode.EDITING;
+    this._destinations = this._pointsModel.getDestinations();
+    this._cities = this._pointsModel.getCities();
+    this._types = this._pointsModel.getTypes();
+    this._offers = this._pointsModel.getOffers();
 
     this._newPointComponent = new TripEditPointView(this._cities, this._types, this._destinations, this._offers, this._point);
     render(this._container, this._newPointComponent , RenderPosition.AFTERBEGIN);
@@ -48,7 +48,7 @@ export default class PointNew {
     this._changeData(
       UserAction.ADD_POINT,
       UpdateType.MAJOR,
-      {...point, id: nanoid()},
+      point,
     );
 
     this.destroy();

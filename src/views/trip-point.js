@@ -1,7 +1,6 @@
 import { getDateInFormat, getPeriod } from '../utils/common';
-import {typeIcons} from '../mock/data';
 import Abstract from './abstract';
-import { DateFormat } from '../const';
+import {DateFormat, TypeIcons} from '../const';
 
 const createTripPointTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offers, type, destination }) => {
   const { name } = destination;
@@ -21,7 +20,7 @@ const createTripPointTemplate = ({ basePrice, dateFrom, dateTo, isFavorite, offe
             <div class="event">
               <time class="event__date" datetime="${getDateInFormat(dateFrom, DateFormat.DEFAULT)}">${getDateInFormat(dateFrom, DateFormat.DATE)}</time>
               <div class="event__type">
-                <img class="event__type-icon" width="42" height="42" src="${typeIcons.get(type.toLowerCase())}" alt="Event type icon">
+                <img class="event__type-icon" width="42" height="42" src="${TypeIcons.get(type.toLowerCase())}" alt="Event type icon">
               </div>
               <h3 class="event__title">${type} ${name}</h3>
               <div class="event__schedule">

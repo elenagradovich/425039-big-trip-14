@@ -36,10 +36,6 @@ export const render = (container, child, place) => {
   }
 };
 
-export const renderTemplate = (container, template, place = RenderPosition.BEFOREEND) => {
-  container.insertAdjacentHTML(place, template);
-};
-
 export const remove = (component) => {
   if (component === null) {
     return;
