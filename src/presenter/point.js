@@ -93,8 +93,6 @@ export default class Point {
       UserAction.UPDATE_POINT,
       UpdateType.MAJOR,
       point);
-    // this._replaceEditPointToPoint();
-    // document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
   _handleDeleteClick(point) {
@@ -102,9 +100,6 @@ export default class Point {
       UserAction.DELETE_POINT,
       UpdateType.MAJOR,
       point);
-    // this._handlePointClose();
-    // this.destroy();
-    // document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
   _handleFavoriteClick() {

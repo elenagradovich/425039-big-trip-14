@@ -137,7 +137,7 @@ export default class Points {
         this._pointPresenterContainer[update.id].setViewState(ActionState.DELETING);
         this._api.deletePoint(update)
           .then(() => {
-            this._pointsModel.deletePoint(updateType, update.id);
+            this._pointsModel.deletePoint(updateType, update);
             this._infoModel.setInfoData(this._pointsModel.getPoints());
           })
           .catch(() => {

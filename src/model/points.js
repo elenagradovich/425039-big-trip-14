@@ -127,6 +127,7 @@ export default class Points extends Observer{
     delete adaptedTask.dateTo;
     delete adaptedTask.isFavorite;
 
+
     return adaptedTask;
   }
 }

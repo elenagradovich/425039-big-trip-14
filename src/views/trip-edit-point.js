@@ -16,6 +16,7 @@ const DEFAULT_OFFER = {
   },
   type: '',
   offers: '',
+  isFavorite: false,
 };
 
 
