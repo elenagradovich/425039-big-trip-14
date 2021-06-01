@@ -153,12 +153,12 @@ export default class Points {
         this._pointPresenterContainer[data.id].init(data);
         break;
       case UpdateType.MAJOR:
-        if(!rerender) break;
+        if(!rerender) { break; }
         this._clearPoints();
         this._renderPoints();
         break;
       case UpdateType.INIT:
-        if(!rerender) break;
+        if(!rerender) { break; }
         this._isLoading = false;
         remove(this._loadingComponent);
         this._renderPoints();

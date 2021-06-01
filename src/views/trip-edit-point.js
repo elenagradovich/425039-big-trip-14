@@ -270,7 +270,7 @@ export default class TripEditPoint extends SmartView {
     element = flatpickr(
       this.getElement().querySelector(elementSelector),
       {
-        time_24hr: true,
+        'time_24hr': true,
         enableTime: true,
         dateFormat: 'd/m/Y h:i',
         defaultDate: initialValue,
