@@ -4,6 +4,7 @@ import SortModel from './model/sort';
 import FilterModel from './model/filters';
 import NavigationModel from './model/navigation';
 import InfoModel from './model/info';
+import StatsModel from './model/stats';
 import API from './api';
 
 const errorContainer = document.querySelector('body');
@@ -22,9 +23,10 @@ const sortModel = new SortModel();
 const filterModel = new FilterModel();
 const navigationModel = new NavigationModel();
 const infoModel = new InfoModel();
+const statsModel = new StatsModel();
 
 const tripPresenter = new MainPresenter(tripPointsContainer, tripNavigationContainer, tripFiltersContainer, tripMainContainer,
-  pointsModel, sortModel, filterModel, navigationModel, infoModel, api);
+  pointsModel, sortModel, filterModel, navigationModel, infoModel, statsModel, api);
 tripPresenter.init();
 
 api.getInitialData(pointsModel, infoModel);

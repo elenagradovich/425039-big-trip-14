@@ -9,7 +9,7 @@ import { RenderPosition, SortTypes, UpdateType, UserAction, FilterTypes, ActionS
 import LoadingComponentView from '../views/trip-loading';
 
 export default class Points {
-  constructor(container, pointsModel, sortModel, filterModel, infoModel, api) {
+  constructor(container, pointsModel, sortModel, filterModel, infoModel, navigationModel, api) {
     this._isLoading = true;
     this._container = container;
     this._pointsComponent = null;
@@ -19,6 +19,7 @@ export default class Points {
     this._sortModel = sortModel;
     this._pointsModel = pointsModel;
     this._infoModel = infoModel;
+    this._navModel = navigationModel;
 
     this._api = api;
 
@@ -33,6 +34,7 @@ export default class Points {
     this._pointsModel.subscribe(this._handleModelEvent);
     this._filterModel.subscribe(this._handleModelEvent);
     this._sortModel.subscribe(this._handleModelEvent);
+    this._navModel.subscribe(this._handleModelEvent);
   }
 
   init() {
@@ -188,5 +190,9 @@ export default class Points {
     this._sortModel.setActiveSortType(UpdateType.MAJOR, SortTypes.DAY, false);
 
     this._pointNewPresenter.init();
+  }
+
+  destroy() {
+    remove(this._pointsComponent);
   }
 }

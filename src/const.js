@@ -9,7 +9,7 @@ export const FilterTypes = {
   PAST: 'Past',
 };
 
-export const NavParameters = {
+export const NavTabs = {
   TABLE: 'Table',
   STATS: 'Stats',
 };
@@ -45,6 +45,7 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
+  DESTROY: 'DESTROY',
 };
 
 

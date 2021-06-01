@@ -1,18 +1,18 @@
 import Observer from '../utils/observer';
-import { NavParameters } from '../const';
+import { NavTabs } from '../const';
 
 export default class Navigation extends Observer {
   constructor() {
     super();
-    this._activeNavigation = NavParameters.TABLE;
+    this._activeNavTab = NavTabs.TABLE;
   }
 
-  getActivePage() {
-    return this._activeNavigation;
+  getActiveNavTab() {
+    return this._activeNavTab;
   }
 
-  setActivePage(updateType, page) {
-    this._activeNavigation = page;
-    this._notify(updateType, page);
+  setActiveNavTab(tab) {
+    this._activeNavTab = tab;
+    this._notify(tab);
   }
 }
