@@ -3,7 +3,7 @@ import { remove, render } from '../utils/render';
 import { RenderPosition, Mode, UserAction, UpdateType } from '../const';
 
 export default class PointNew {
-  constructor(container, pointsModel, changeData, changeMode) {
+  constructor(container, pointsModel, changeData, changeMode, addNewPointButton) {
     this._point = null;
     this._container = container;
     this._newPointComponent = null;
@@ -11,6 +11,8 @@ export default class PointNew {
     this._changeMode = changeMode;
     this._mode = Mode.DEFAULT;
     this._pointsModel = pointsModel;
+
+    this._addNewPointButtonElement = addNewPointButton;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._handlePointClose = this._handlePointClose.bind(this);
@@ -41,6 +43,7 @@ export default class PointNew {
 
   _handlePointClose() {
     this._newPointComponent.reset();
+    this._addNewPointButtonElement.disabled = false;
     document.removeEventListener('keydown', this._handleEscKeyDown);
   }
 
@@ -93,6 +96,7 @@ export default class PointNew {
       return;
     }
 
+    this._addNewPointButtonElement.disabled = false;
     remove(this._newPointComponent);
     this._newPointComponent = null;
 

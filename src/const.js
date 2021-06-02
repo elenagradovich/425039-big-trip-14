@@ -45,7 +45,6 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
-  DESTROY: 'DESTROY',
 };
 
 

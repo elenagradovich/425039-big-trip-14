@@ -1,23 +1,29 @@
 import Observer from '../utils/observer';
+import {getCostsByType, getCountPointsByType, getDurationsByType} from '../utils/stats';
 
 export default class Stats extends Observer {
   constructor() {
     super();
+    this._costsByType = '';
+    this._countPointsByType = '';
+    this._durationsByType = '';
   }
 
-  setInfoData(points) {
-    this._notify(points);
+  getCostsByType() {
+    return this._costsByType;
   }
 
-  getRouteCities() {
-    return this._routeCities;
+  getCountPointsByType() {
+    return this._countPointsByType;
   }
 
-  getRouteCost() {
-    return this._routeCost;
+  getDurationsByType() {
+    return this._durationsByType;
   }
 
-  getRoutePeriod() {
-    return this._routePeriod;
+  setStatsData(points) {
+    this._costsByType = getCostsByType(points);
+    this._countPointsByType = getCountPointsByType(points);
+    this._durationsByType = getDurationsByType(points);
   }
 }
