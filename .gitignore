@@ -15,6 +15,3 @@ node_modules/
 public/bundle.js
 public/bundle.js.map
 
-tsconfig.json
-dest/test.js
-src/view/test.ts
