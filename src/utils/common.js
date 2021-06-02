@@ -44,7 +44,7 @@ export const createElement = (template) => {
 
 export const getDiffDates = (start, end, unitMeasure) => dayjs(end).diff(dayjs(start), unitMeasure);
 
-const getFormatTime = (period) => {
+export const getFormatTime = (period) => {
   if(period >= MIN_PERIOD_IN_MINUTES && period < MINUTES_IN_HOUR) {
     return `${period}M`;
   }

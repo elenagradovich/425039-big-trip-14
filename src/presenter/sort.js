@@ -52,4 +52,8 @@ export default class SortPresenter {
 
     this._sortModel.setActiveSortType(UpdateType.MAJOR, sortParam);
   }
+
+  destroy() {
+    remove(this._element);
+  }
 }

@@ -9,16 +9,20 @@ import { RenderPosition, SortTypes, UpdateType, UserAction, FilterTypes, ActionS
 import LoadingComponentView from '../views/trip-loading';
 
 export default class Points {
-  constructor(container, pointsModel, sortModel, filterModel, infoModel, api) {
+  constructor(container, pointsModel, sortModel, filterModel, infoModel, navigationModel, statsModel,
+    api, addNewPointButton) {
     this._isLoading = true;
     this._container = container;
     this._pointsComponent = null;
     this._pointPresenterContainer = {};
+    this._addNewPointButtonElement = addNewPointButton;
 
     this._filterModel = filterModel;
     this._sortModel = sortModel;
     this._pointsModel = pointsModel;
     this._infoModel = infoModel;
+    this._navModel = navigationModel;
+    this._statsModel = statsModel;
 
     this._api = api;
 
@@ -33,20 +37,22 @@ export default class Points {
     this._pointsModel.subscribe(this._handleModelEvent);
     this._filterModel.subscribe(this._handleModelEvent);
     this._sortModel.subscribe(this._handleModelEvent);
+    this._navModel.subscribe(this._handleModelEvent);
+    this._statsModel.subscribe(this._handleModelEvent);
   }
 
   init() {
     this._pointsComponent = new TripPointsView();
     this._renderPointsContainer();
     this._renderPoints();
-    this._addNewPointButtonElement = document.querySelector('.trip-main__event-add-btn');
     this._pointNewPresenter = new PointNewPresenter(this._pointsComponent,
       this._pointsModel,
-      this._handleViewAction, this._handleModeChange);
+      this._handleViewAction, this._handleModeChange, this._addNewPointButtonElement);
 
     this._addNewPointButtonElement.addEventListener('click', (evt) => {
       evt.preventDefault();
       this.createNewPoint();
+      this._addNewPointButtonElement.disabled = true;
     });
   }
 
@@ -117,6 +123,7 @@ export default class Points {
           .then((response) => {
             this._pointsModel.updatePoint(updateType, response);
             this._infoModel.setInfoData(this._pointsModel.getPoints());
+            this._statsModel.setStatsData(this._pointsModel.getPoints());
           })
           .catch(() => {
             this._pointPresenterContainer[update.id].setViewState(ActionState.ABORTING);
@@ -128,6 +135,8 @@ export default class Points {
           .then((response) => {
             this._pointsModel.addPoint(updateType, response);
             this._infoModel.setInfoData(this._pointsModel.getPoints());
+            this._statsModel.setStatsData(this._pointsModel.getPoints());
+            this._addNewPointButtonElement.disabled = false;
           })
           .catch(() => {
             this._pointNewPresenter.setAborting();
@@ -188,5 +197,9 @@ export default class Points {
     this._sortModel.setActiveSortType(UpdateType.MAJOR, SortTypes.DAY, false);
 
     this._pointNewPresenter.init();
+  }
+
+  destroy() {
+    remove(this._pointsComponent);
   }
 }

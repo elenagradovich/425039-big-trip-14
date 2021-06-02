@@ -9,7 +9,7 @@ export const FilterTypes = {
   PAST: 'Past',
 };
 
-export const NavParameters = {
+export const NavTabs = {
   TABLE: 'Table',
   STATS: 'Stats',
 };
