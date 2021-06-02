@@ -4,7 +4,7 @@ import SortPresenter from './sort';
 import NavigationPresenter from './navigation';
 import InfoPresenter from './info';
 import StatsPresenter from './stats';
-import { NavTabs } from '../const';
+import {NavTabs, SortTypes, UpdateType} from '../const';
 
 export default class Main {
   constructor(tripContainer, navigationContainer, filtersContainer, tripMainContainer,
@@ -56,13 +56,14 @@ export default class Main {
     switch (activeTab) {
       case NavTabs.TABLE:
         this._statsPresenter.destroy();
+        this._sortModel.setActiveSortType(UpdateType.MAJOR, SortTypes.DAY);
         this._pointsPresenter.init();
         this._sortPresenter.init();
         this._addNewPointButton.disabled = false;
         break;
       case NavTabs.STATS:
-        this._sortPresenter.destroy();
         this._pointsPresenter.destroy();
+        this._sortPresenter.destroy();
         this._statsPresenter.init();
         this._addNewPointButton.disabled = true;
         break;

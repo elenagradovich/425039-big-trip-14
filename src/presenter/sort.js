@@ -54,6 +54,10 @@ export default class SortPresenter {
   }
 
   destroy() {
+    if (this._element === null) {
+      return;
+    }
     remove(this._element);
+    this._element = null;
   }
 }
